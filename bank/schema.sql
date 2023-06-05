@@ -6,10 +6,10 @@ CREATE TABLE IF NOT EXISTS Hosts(
 
 CREATE TABLE IF NOT EXISTS Listings(
 	lid integer PRIMARY KEY,
-	name varchar(120),
-	area varchar(60),
-	loc varchar(60),
-	room_type varchar(60),
+	name varchar(240),
+	area varchar(120),
+	loc varchar(120),
+	room_type varchar(120),
 	price integer,
 	hid integer REFERENCES Hosts(hid) ON DELETE CASCADE
 );

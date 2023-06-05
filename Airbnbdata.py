@@ -69,8 +69,17 @@ def Attractions(name,loc,price):
     conn.commit()
     cur.close()
 
-for i in range(df.size):
-    Hosts(df['host_id'][i],df['host_name'][i],'$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
+hdf = df[['host_id','host_name']]
+hdf = hdf.drop_duplicates()
+hdf = hdf.reset_index(drop=True)
+
+df = df.loc[df['name'].str.len() <= 120]
+df = df.reset_index(drop=True)
+
+for i in range(len(hdf. index)):
+    Hosts(hdf['host_id'][i],hdf['host_name'][i],'$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
+
+for i in range(len(df. index)):
     Listings(df['id'][i],df['name'][i],df['neighbourhood_group'][i],df['neighbourhood'][i],df['room_type'][i],df['price'][i],df['host_id'][i])  
 
 Transportation('Taxi', 25)
