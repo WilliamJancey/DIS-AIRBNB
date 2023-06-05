@@ -1,0 +1,61 @@
+CREATE TABLE IF NOT EXISTS Hosts(
+	hid integer PRIMARY KEY,
+	name varchar(60),
+	password varchar(120)
+);
+
+CREATE TABLE IF NOT EXISTS Listings(
+	lid integer PRIMARY KEY,
+	name varchar(120),
+	area varchar(60),
+	loc varchar(60),
+	room_type varchar(60),
+	price integer,
+	hid integer REFERENCES Hosts(hid) ON DELETE CASCADE
+);
+
+CREATE TABLE Users(
+	uid integer PRIMARY KEY,
+	name varchar(60),
+	email varchar(60),
+	password varchar(120)
+);
+
+CREATE TABLE IF NOT EXISTS Rents(
+	uid integer REFERENCES Users(uid),
+	lid integer REFERENCES Listings(lid),
+	PRIMARY KEY (uid, lid)
+);
+
+CREATE TABLE IF NOT EXISTS Owns(
+	hid integer REFERENCES Hosts(hid),
+	lid integer REFERENCES Listings(lid),
+	PRIMARY KEY (hid, lid)
+);
+
+CREATE TABLE IF NOT EXISTS Transportation(
+	vehicle varchar(60) PRIMARY KEY,
+	price integer
+);
+
+CREATE TABLE IF NOT EXISTS Uses(
+	vehicle varchar(60) REFERENCES Transportation(vehicle),
+	uid integer REFERENCES Users(uid),
+	PRIMARY KEY (vehicle, uid)
+);
+
+CREATE TABLE IF NOT EXISTS Attractions(
+	name varchar(60),
+	loc varchar(60),
+	price integer,
+	PRIMARY KEY (name, loc)
+);
+
+/* CREATE TABLE IF NOT EXISTS Visits(
+	name varchar(60) NOT NULL REFERENCES Attractions(name),
+	loc varchar(60) NOT NULL REFERENCES Attractions(loc),
+	uid integer REFERENCES Users(uid)
+);
+
+ALTER TABLE Visits ADD CONSTRAINT pk_visits
+	PRIMARY KEY (name, loc, uid); */
