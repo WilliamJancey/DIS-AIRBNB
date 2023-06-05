@@ -69,6 +69,18 @@ def Attractions(name,loc,price):
     conn.commit()
     cur.close()
 
+def Owns(hid,lid):
+    hid = int(hid)
+    lid = int(lid)
+    cur = conn.cursor()
+    sql = """
+    INSERT INTO public.Owns(hid,lid)
+    VALUES(%s,%s);    
+    """
+    cur.execute(sql, (hid,lid))
+    conn.commit()
+    cur.close()
+
 hdf = df[['host_id','host_name']]
 hdf = hdf.drop_duplicates()
 hdf = hdf.reset_index(drop=True)
@@ -81,6 +93,9 @@ for i in range(len(hdf. index)):
 
 for i in range(len(df. index)):
     Listings(df['id'][i],df['name'][i],df['neighbourhood_group'][i],df['neighbourhood'][i],df['room_type'][i],df['price'][i],df['host_id'][i])  
+
+for i in range(len(df. index)):
+    Owns(df['host_id'][i],df['id'][i])
 
 Transportation('Taxi', 25)
 Transportation('Uber', 22)

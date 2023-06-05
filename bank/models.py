@@ -8,11 +8,11 @@ from psycopg2 import sql
 def load_user(user_id):
     cur = conn.cursor()
 
-    schema = 'customers'
-    id = 'cpr_number'
-    if str(user_id).startswith('60'):
-        schema = 'employees'
-        id = 'id'
+    schema = 'Users'
+    id = 'uid'
+    if user_id > 6:
+        schema = 'Hosts'
+        id = 'hid'
 
     user_sql = sql.SQL("""
     SELECT * FROM {}
@@ -27,105 +27,105 @@ def load_user(user_id):
     		# else:
     		#   return Customers(cur.fetchone())
 
-        return Employees(cur.fetchone()) if schema == 'employees' else Customers(cur.fetchone())
+        return Hosts(cur.fetchone()) if schema == 'Hosts' else Users(cur.fetchone())
     else:
         return None
 
 
-class Customers(tuple, UserMixin):
+class Users(tuple, UserMixin):
     def __init__(self, user_data):
-        self.CPR_number = user_data[0]
-        self.risktype = False
-        self.password = user_data[2]
-        self.name = user_data[3]
-        self.address = user_data[4]
-        self.role = "customer"
+        self.uid = user_data[0]
+        self.name = user_data[1]
+        self.email = user_data[2]
+        self.password = user_data[3]
+        self.role = "user"
 
     def get_id(self):
-       return (self.CPR_number)
+       return (self.uid)
 
-class Employees(tuple, UserMixin):
-    def __init__(self, employee_data):
-        self.id = employee_data[0]
-        self.name = employee_data[1]
-        self.password = employee_data[2]
-        self.role = "employee"
+class Hosts(tuple, UserMixin):
+    def __init__(self, host_data):
+        self.hid = host_data[0]
+        self.name = host_data[1]
+        self.password = host_data[2]
+        self.role = "host"
 
     def get_id(self):
-       return (self.id)
+       return (self.hid)
 
-class CheckingAccount(tuple):
-    def __init__(self, user_data):
-        self.id = user_data[0]
-        self.create_date = user_data[1]
-        self.CPR_number = user_data[2]
-        self.amount = 0
+# class CheckingAccount(tuple):
+#     def __init__(self, user_data):
+#         self.id = user_data[0]
+#         self.create_date = user_data[1]
+#         self.CPR_number = user_data[2]
+#         self.amount = 0
 
-class InvestmentAccount(tuple):
-    def __init__(self, user_data):
-        self.id = user_data[0]
-        self.start_date = user_data[1]
-        self.maturity_date = user_data[2]
-        self.amount = 0
+# class InvestmentAccount(tuple):
+#     def __init__(self, user_data):
+#         self.id = user_data[0]
+#         self.start_date = user_data[1]
+#         self.maturity_date = user_data[2]
+#         self.amount = 0
 
-class Transfers(tuple):
-    def __init__(self, user_data):
-        self.id = user_data[0]
-        self.amount = user_data[1]
-        self.transfer_date = user_data[2]
+# class Transfers(tuple):
+#     def __init__(self, user_data):
+#         self.id = user_data[0]
+#         self.amount = user_data[1]
+#         self.transfer_date = user_data[2]
 
-def insert_Customers(name, CPR_number, password):
+
+def Users(uid,name,email,password):
+    uid = int(uid)
     cur = conn.cursor()
     sql = """
-    INSERT INTO Customers(name, CPR_number, password)
-    VALUES (%s, %s, %s)
+    INSERT INTO public.Users(uid,name,email,password)
+    VALUES(%s,%s,%s,%s);    
     """
-    cur.execute(sql, (name, CPR_number, password))
-    # Husk commit() for INSERT og UPDATE, men ikke til SELECT!
+    cur.execute(sql, (uid,name,email,password))
     conn.commit()
     cur.close()
 
-def select_Customers(CPR_number):
+
+def select_Users(uid):
     cur = conn.cursor()
     sql = """
-    SELECT * FROM Customers
-    WHERE CPR_number = %s
+    SELECT * FROM Users
+    WHERE uid = %s
     """
-    cur.execute(sql, (CPR_number,))
-    user = Customers(cur.fetchone()) if cur.rowcount > 0 else None;
+    cur.execute(sql, (uid,))
+    user = Users(cur.fetchone()) if cur.rowcount > 0 else None;
     cur.close()
     return user
 
-def select_Employees(id):
+def select_Hosts(id):
     cur = conn.cursor()
     sql = """
-    SELECT * FROM Employees
+    SELECT * FROM Hosts
     WHERE id = %s
     """
     cur.execute(sql, (id,))
-    user = Employees(cur.fetchone()) if cur.rowcount > 0 else None;
+    user = Hosts(cur.fetchone()) if cur.rowcount > 0 else None;
     cur.close()
     return user
 
-def update_CheckingAccount(amount, CPR_number):
+def update_Rents(uid, lid):
     cur = conn.cursor()
     sql = """
-    UPDATE CheckingAccount
-    SET amount = %s
-    WHERE CPR_number = %s
+    INSERT INTO Rents(uid, lid)
+    VALUES(%s,%s);
     """
-    cur.execute(sql, (amount, CPR_number))
+    cur.execute(sql, (uid, lid))
     # Husk commit() for INSERT og UPDATE, men ikke til SELECT!
     conn.commit()
     cur.close()
 
-def transfer_account(date, amount, from_account, to_account):
+def update_Uses(vehicle, uid):
     cur = conn.cursor()
     sql = """
-    INSERT INTO Transfers(transfer_date, amount, from_account, to_account)
-    VALUES (%s, %s, %s, %s)
+    INSERT INTO Uses(vehicle, uid)
+    VALUES (%s, %s)
     """
-    cur.execute(sql, (date, amount, from_account, to_account))
+    cur.execute(sql, (vehicle, uid))
     # Husk commit() for INSERT og UPDATE, men ikke til SELECT!
     conn.commit()
     cur.close()
