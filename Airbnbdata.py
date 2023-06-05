@@ -1,17 +1,19 @@
 import pandas as pd
+from bank import conn
+from psycopg2 import sql
+
 def read_data(filename):
     """Reads data from a csv file and returns a dataframe containing each article
     
     """
-    df = pd.read_csv(filename, index_col=0)
+    df = pd.read_csv(filename)
 
     return df
+
 df = read_data('AB_NYC_2019.csv')
 
-from bank import conn
-from psycopg2 import sql
-
 def Users(uid,name,email,password):
+    uid = int(uid)
     cur = conn.cursor()
     sql = """
     INSERT INTO public.Users(uid,name,email,password)
@@ -22,6 +24,7 @@ def Users(uid,name,email,password):
     cur.close()
 
 def Hosts(hid,name,password):
+    hid = int(hid)
     cur = conn.cursor()
     sql = """
     INSERT INTO public.Hosts(hid,name,password)
@@ -31,17 +34,21 @@ def Hosts(hid,name,password):
     conn.commit()
     cur.close()
 
-def Listings(lid,name,area,loc,room_type,price,no_reviews, hid):
+def Listings(lid,name,area,loc,room_type,price, hid):
+    lid = int(lid)
+    price = int(price)
+    hid = int(hid)
     cur = conn.cursor()
     sql = """
-    INSERT INTO public.Listings(lid,name,area,loc,room_type,price,no_reviews, hid)
-    VALUES(%s,%s,%s,%s,%s,%s,%s,%s);    
+    INSERT INTO public.Listings(lid,name,area,loc,room_type,price, hid)
+    VALUES(%s,%s,%s,%s,%s,%s,%s);    
     """
-    cur.execute(sql, (lid,name,area,loc,room_type,price,no_reviews, hid))
+    cur.execute(sql, (lid,name,area,loc,room_type,price, hid))
     conn.commit()
     cur.close()
 
 def Transportation(vehicle,price):
+    price = int(price)
     cur = conn.cursor()
     sql = """
     INSERT INTO public.Transportation(vehicle,price)
@@ -52,6 +59,7 @@ def Transportation(vehicle,price):
     cur.close()
 
 def Attractions(name,loc,price):
+    price = int(price)
     cur = conn.cursor()
     sql = """
     INSERT INTO public.Attractions(name,loc,price)
