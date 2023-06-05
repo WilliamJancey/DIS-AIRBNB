@@ -130,7 +130,18 @@ def update_Uses(vehicle, uid):
     conn.commit()
     cur.close()
 
-def select_cus_accounts(cpr_number):
+def update_Visits(uid,name,loc):
+    cur = conn.cursor()
+    sql = """
+    INSERT INTO Visits(uid,name,loc)
+    VALUES (%s, %s, %s)
+    """ 
+    cur.execute(sql, (uid,name,loc))
+    # Husk commit() for INSERT og UPDATE, men ikke til SELECT!
+    conn.commit()
+    cur.close()
+
+def select_userbookings(uid):
     cur = conn.cursor()
     sql = """
     SELECT
