@@ -10,7 +10,8 @@ Run the code below to install the necessary modules.
 
 ## Database init
 1. set the database in __init__.py file.
-2. run schema.sql, schema_ins.sql, schema_upd.sql, schema_upd_2.sql in your database.
+2. run schema.sql in your database.
+3. run Airbnbdata.py to populate the database.
 
 ## Running flask
 ### The python way
