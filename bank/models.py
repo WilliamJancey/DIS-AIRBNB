@@ -141,22 +141,28 @@ def update_Visits(uid,name,loc):
     conn.commit()
     cur.close()
 
-def select_userbookings(uid):
+def select_user_bookings(uid):
     cur = conn.cursor()
     sql = """
-    SELECT
-      e.name employee
-    , c.name customer
-    , cpr_number
-    , account_number
-    FROM manages m
-      NATURAL JOIN accounts
-      NATURAL JOIN customers c
-      LEFT OUTER JOIN employees e ON m.emp_cpr_number = e.id
-	WHERE cpr_number = %s
+    SELECT name, area, loc, room_type, price
+    FROM Rents R JOIN Listings L ON R.lid = L.lid
+    WHERE uid = %s
     ;
     """
-    cur.execute(sql, (cpr_number,))
+    cur.execute(sql, (uid))
+    tuple_resultset = cur.fetchall()
+    cur.close()
+    return tuple_resultset
+
+def select_user_transportation(uid):
+    cur = conn.cursor()
+    sql = """
+    SELECT uid, T.vehicle, price
+    FROM Transportation T JOIN Uses U ON T.vehicle = U.vehicle
+    WHERE uid = %s
+    ;
+    """
+    cur.execute(sql, (uid))
     tuple_resultset = cur.fetchall()
     cur.close()
     return tuple_resultset

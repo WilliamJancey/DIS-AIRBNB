@@ -1,6 +1,25 @@
 import pandas as pd
-from bank import conn
+#from bank import conn
 from psycopg2 import sql
+
+from flask import Flask
+import psycopg2
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+
+#202212
+#from flask import session
+#from flask_session import Session
+
+
+app = Flask(__name__)
+
+app.config['SECRET_KEY'] = 'fc089b9218301ad987914c53481bff04'
+
+# set your own database
+#db = "dbname='bank' user='postgres' host='127.0.0.1' password = 'UIS'"
+db = "dbname='airbnb' user='postgres' host='127.0.0.1' password = 'William'"
+conn = psycopg2.connect(db)
 
 def read_data(filename):
     """Reads data from a csv file and returns a dataframe containing each article
@@ -81,6 +100,29 @@ def Owns(hid,lid):
     conn.commit()
     cur.close()
 
+def Rents(uid,lid):
+    uid = int(uid)
+    lid = int(lid)
+    cur = conn.cursor()
+    sql = """
+    INSERT INTO public.Rents(uid,lid)
+    VALUES(%s,%s);    
+    """
+    cur.execute(sql, (uid,lid))
+    conn.commit()
+    cur.close()
+
+def Uses(uid,vehicle):
+    uid = int(uid)
+    cur = conn.cursor()
+    sql = """
+    INSERT INTO public.Uses(uid,vehicle)
+    VALUES(%s,%s);    
+    """
+    cur.execute(sql, (uid,vehicle))
+    conn.commit()
+    cur.close()
+
 hdf = df[['host_id','host_name']]
 hdf = hdf.drop_duplicates()
 hdf = hdf.reset_index(drop=True)
@@ -116,3 +158,7 @@ Users(3,'Dmitriy','Dmitriy@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S
 Users(4,'Axel','Axel@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
 Users(5,'Christian','Christian@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
 Users(6,'Anders','Anders@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
+
+Rents(1,5022)
+Uses(2, 'Metro')
+Uses(3, 'Metro')

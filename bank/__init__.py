@@ -30,7 +30,7 @@ login_manager.login_message_category = 'info'
 
 
 #202212
-roles = ["ingen","employee","customer"]
+roles = ["ingen","host","user"]
 print(roles)
 mysession = {"state" : "initializing","role" : "Not assingned", "id": 0 ,"age" : 202212}
 print(mysession)
