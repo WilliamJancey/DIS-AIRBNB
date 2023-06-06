@@ -28,7 +28,7 @@ login_manager.login_message_category = 'info'
 # Check Configuration section for more details
 #SESSION_TYPE = 'filesystem'
 
-
+# fnjalskclkm
 #202212
 roles = ["ingen","host","user"]
 print(roles)
