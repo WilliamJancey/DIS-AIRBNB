@@ -6,20 +6,19 @@ from psycopg2 import sql
 
 @login_manager.user_loader
 def load_user(user_id):
+    print("user_id = ", user_id)
     cur = conn.cursor()
 
-    schema = 'Users'
-    id = 'uid'
-    if user_id > 6:
-        schema = 'Hosts'
-        id = 'hid'
+    # schema = 'Users'
+    # id = 'uid'
 
     user_sql = sql.SQL("""
-    SELECT * FROM {}
-    WHERE {} = %s
-    """).format(sql.Identifier(schema),  sql.Identifier(id))
+    SELECT * FROM Users
+    WHERE uid = %s
+    """)
 
     cur.execute(user_sql, (int(user_id),))
+
     if cur.rowcount > 0:
         # return-if svarer til nedenstående:
     		# if schema == 'employees':
@@ -41,7 +40,7 @@ class Users(tuple, UserMixin):
         self.role = "user"
 
     def get_id(self):
-       return (self.uid)
+       return str(self.uid)
 
 class Hosts(tuple, UserMixin):
     def __init__(self, host_data):
@@ -51,7 +50,7 @@ class Hosts(tuple, UserMixin):
         self.role = "host"
 
     def get_id(self):
-       return (self.hid)
+       return str(self.hid)
 
 # class CheckingAccount(tuple):
 #     def __init__(self, user_data):
@@ -90,7 +89,7 @@ def select_Users(uid):
     cur = conn.cursor()
     sql = """
     SELECT * FROM Users
-    WHERE email = %s
+    WHERE uid = %s
     """
     cur.execute(sql, (uid,))
     user = Users(cur.fetchone()) if cur.rowcount > 0 else None;
@@ -101,7 +100,7 @@ def select_Hosts(id):
     cur = conn.cursor()
     sql = """
     SELECT * FROM Hosts
-    WHERE id = %s
+    WHERE hid = %s
     """
     cur.execute(sql, (id,))
     user = Hosts(cur.fetchone()) if cur.rowcount > 0 else None;
