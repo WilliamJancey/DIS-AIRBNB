@@ -26,7 +26,7 @@ def load_user(user_id):
     		# else:
     		#   return Customers(cur.fetchone())
 
-        return Hosts(cur.fetchone()) if schema == 'Hosts' else Users(cur.fetchone())
+        return Users(cur.fetchone())
     else:
         return None
 
