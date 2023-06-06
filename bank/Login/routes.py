@@ -8,6 +8,7 @@ from bank.models import Users, select_Users, select_Hosts
 from bank import roles, mysession
 
 Login = Blueprint('Login', __name__)
+Listings = Blueprint('Listings', __name__)
 
 posts = [{}]
 
@@ -44,8 +45,8 @@ def login():
     # jeg tror det her betyder at man er er logget på, men har redirected til login
     # så kald formen igen
     # men jeg forstår det ikke
-    if current_user.is_authenticated:
-        return redirect(url_for('Login.home'))
+    """ if current_user.is_authenticated:
+        return redirect(url_for('Login.home')) """
 
     is_Host = True if request.args.get('is_Host') == 'true' else False
     form = HostLoginForm() if is_Host else UserLoginForm()
@@ -59,52 +60,46 @@ def login():
         # eller om det er et User login.
         # betinget tildeling. Enten en Host - eller en User instantieret
         # Skal muligvis laves om. Hvad hvis nu user ikke blir instantieret
-        user = select_Hosts(form.id.data) if is_Host else select_Users(form.id.data)
+        user = select_Hosts(form.id.data) if is_Host else select_Users(form.email.data)
 
+        print("\n",user,"\n")
         # Derefter tjek om hashet af adgangskoden passer med det fra databasen...
         # Her checkes om der er logget på
         if user != None and bcrypt.check_password_hash(user[3], form.password.data):
 
-            #202212
+            # This does not set the role correctly, when fixed remove the outcommented check in routeU.py line 29-31
             print("role:" + user.role)
-            if user.role == 'Host':
+            if user.role == 'host':
                 mysession["role"] = roles[1] #Host
-            elif user.role == 'User':
+            elif user.role == 'user':
                 mysession["role"] = roles[2] #User
             else:
                 mysession["role"] = roles[0] #ingen
 
-            mysession["id"] = form.id.data
+            mysession["id"] = form.email.data
             print(mysession)
             print(roles)
 
             login_user(user, remember=form.remember.data)
             flash('Login successful.','success')
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('Login.home'))
+            print("This is Login.home:", url_for('Login.home'))
+            return redirect('/listings')
+            #return redirect(next_page) if next_page else redirect(url_for('Login.home'))
         else:
             flash('Login Unsuccessful. Please check identifier and password', 'danger')
-    #202212
-    #Get lists of Hosts and Users
-    teachers = [{"id": str(6234), "name":"anders. teachers with 6."}, {"id": str(6214), "name":"simon"},
-                {"id": str(6862), "name":"dmitry"}, {"id": str(6476), "name":"finn"}]
-    parents =  [{"id": str(4234), "name":"parent-anders. parents with 4."}, {"id": str(4214), "name":"parent-simon"},
-                {"id": str(4862), "name":"parent-dmitry"}, {"id": str(4476), "name":"parent-finn"}]
-    students = [{"id": str(5234), "name":"student-anders. students with 5."}, {"id": str(5214), "name":"student-simon"},
-                {"id": str(5862), "name":"student-dmitry"}, {"id": str(5476), "name":"student-finn"}]
 
     #202212
     role =  mysession["role"]
     print('role: '+ role)
 
     #return render_template('login.html', title='Login', is_Host=is_Host, form=form)
-    return render_template('login.html', title='Login', is_Host=is_Host, form=form
-    , teachers=teachers, parents=parents, students=students, role=role
-    )
+    return render_template('login.html', title='Login', is_Host=is_Host, form=form, role=role)
 #teachers={{"id": str(1234), "name":"anders"},}
 #data={"user_id": str(user_id), "total_trials":total_trials}
 
     #hvor gemmes login-bruger-id?
+
 
 @Login.route("/logout")
 def logout():

@@ -28,7 +28,7 @@ login_manager.login_message_category = 'info'
 # Check Configuration section for more details
 #SESSION_TYPE = 'filesystem'
 
-# fnjalskclkm
+
 #202212
 roles = ["ingen","host","user"]
 print(roles)
@@ -39,6 +39,7 @@ from bank.Login.routes import Login
 from bank.routesU import User
 # from bank.Customer.routes import Customer
 # from bank.Employee.routes import Employee
+
 app.register_blueprint(Login)
 app.register_blueprint(User)
 # app.register_blueprint(Customer)
