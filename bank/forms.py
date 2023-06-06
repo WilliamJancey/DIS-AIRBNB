@@ -14,7 +14,7 @@ class AddUserForm(FlaskForm):
 
 
 class UserLoginForm(FlaskForm):
-    id = StringField('email', validators=[DataRequired(),Length(min=2, max=60)])
+    email = StringField('Email', validators=[DataRequired(),Length(min=2, max=60)])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')

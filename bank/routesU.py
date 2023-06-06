@@ -11,6 +11,7 @@ User = Blueprint('User', __name__)
 
 @User.route("/listings", methods=['GET', 'POST'])
 def listings():
+    print(current_user.is_authenticated)
     if not current_user.is_authenticated:
         flash('Please Login.','danger')
         return redirect(url_for('Login.login'))
@@ -22,10 +23,12 @@ def listings():
     # move to User DONE
     # duplicate back and change database access here
 
+    print("iuser:",roles[iUser])
+    print('mysession["role"]', mysession["role"])
 
     if not mysession["role"] == roles[iUser]:
         flash('rent listing User mode.','danger')
-        return redirect(url_for('Login.login'))
+        return redirect(url_for('Login.login')) 
 
 
     uid = current_user.get_id()

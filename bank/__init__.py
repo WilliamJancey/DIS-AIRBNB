@@ -39,6 +39,7 @@ from bank.Login.routes import Login
 from bank.routesU import User
 # from bank.Customer.routes import Customer
 # from bank.Employee.routes import Employee
+
 app.register_blueprint(Login)
 app.register_blueprint(User)
 # app.register_blueprint(Customer)

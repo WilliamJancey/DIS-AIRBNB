@@ -1,16 +1,49 @@
-{% extends "layout.html" %}
-{% block content %}
-    <h1>{{ current_user.name }}</h1>
-    {% for post in posts %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
-            </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Mybnb - Your Home Away from Home</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .jumbotron {
+      background-color: rgb(0, 157, 255);
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+    .jumbotron h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+    }
+    .jumbotron p {
+      font-size: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .btn-login {
+      font-size: 1.2rem;
+      padding: 10px 30px;
+    }
+    .footer {
+      background-color: #f8f9fa;
+      padding: 20px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Welcome to Mybnb</h1>
+      <p>Your Home Away from Home</p>
+      <a href="/login" class="btn btn-primary btn-login">Login</a>
           </div>
-        </article>
-    {% endfor %}
-{% endblock content %}
+        </div>
+    </div>
+  </div>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
