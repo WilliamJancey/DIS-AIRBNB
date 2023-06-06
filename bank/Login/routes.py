@@ -1,9 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from bank import app, conn, bcrypt
-from bank.forms import CustomerLoginForm, EmployeeLoginForm
+from bank.forms import UserLoginForm, HostLoginForm
 from flask_login import login_user, current_user, logout_user, login_required
-from bank.models import Customers, select_Customers, select_Employees
-from bank.models import select_cus_accounts
+from bank.models import Users, select_Users, select_Hosts
+#from bank.models import select_cus_accounts
 #202212
 from bank import roles, mysession
 
@@ -47,30 +47,30 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('Login.home'))
 
-    is_employee = True if request.args.get('is_employee') == 'true' else False
-    form = EmployeeLoginForm() if is_employee else CustomerLoginForm()
+    is_Host = True if request.args.get('is_Host') == 'true' else False
+    form = HostLoginForm() if is_Host else UserLoginForm()
 
     # Først bekræft, at inputtet fra formen er gyldigt... (f.eks. ikke tomt)
     if form.validate_on_submit():
 
         #"202212"
         # her checkes noget som skulle være sessionsvariable, men som er en GET-parameter
-        # implementeret af AL. Ideen er at teste på om det er et employee login
-        # eller om det er et customer login.
-        # betinget tildeling. Enten en employee - eller en customer instantieret
+        # implementeret af AL. Ideen er at teste på om det er et Host login
+        # eller om det er et User login.
+        # betinget tildeling. Enten en Host - eller en User instantieret
         # Skal muligvis laves om. Hvad hvis nu user ikke blir instantieret
-        user = select_Employees(form.id.data) if is_employee else select_Customers(form.id.data)
+        user = select_Hosts(form.id.data) if is_Host else select_Users(form.id.data)
 
         # Derefter tjek om hashet af adgangskoden passer med det fra databasen...
         # Her checkes om der er logget på
-        if user != None and bcrypt.check_password_hash(user[2], form.password.data):
+        if user != None and bcrypt.check_password_hash(user[3], form.password.data):
 
             #202212
             print("role:" + user.role)
-            if user.role == 'employee':
-                mysession["role"] = roles[1] #employee
-            elif user.role == 'customer':
-                mysession["role"] = roles[2] #customer
+            if user.role == 'Host':
+                mysession["role"] = roles[1] #Host
+            elif user.role == 'User':
+                mysession["role"] = roles[2] #User
             else:
                 mysession["role"] = roles[0] #ingen
 
@@ -85,7 +85,7 @@ def login():
         else:
             flash('Login Unsuccessful. Please check identifier and password', 'danger')
     #202212
-    #Get lists of employees and customers
+    #Get lists of Hosts and Users
     teachers = [{"id": str(6234), "name":"anders. teachers with 6."}, {"id": str(6214), "name":"simon"},
                 {"id": str(6862), "name":"dmitry"}, {"id": str(6476), "name":"finn"}]
     parents =  [{"id": str(4234), "name":"parent-anders. parents with 4."}, {"id": str(4214), "name":"parent-simon"},
@@ -97,8 +97,8 @@ def login():
     role =  mysession["role"]
     print('role: '+ role)
 
-    #return render_template('login.html', title='Login', is_employee=is_employee, form=form)
-    return render_template('login.html', title='Login', is_employee=is_employee, form=form
+    #return render_template('login.html', title='Login', is_Host=is_Host, form=form)
+    return render_template('login.html', title='Login', is_Host=is_Host, form=form
     , teachers=teachers, parents=parents, students=students, role=role
     )
 #teachers={{"id": str(1234), "name":"anders"},}
@@ -116,16 +116,16 @@ def logout():
     return redirect(url_for('Login.home'))
 
 
-@Login.route("/account")
-@login_required
-def account():
-    mysession["state"]="account"
-    print(mysession)
-    role =  mysession["role"]
-    print('role: '+ role)
+# @Login.route("/account")
+# @login_required
+# def account():
+#     mysession["state"]="account"
+#     print(mysession)
+#     role =  mysession["role"]
+#     print('role: '+ role)
 
-    accounts = select_cus_accounts(current_user.get_id())
-    print(accounts)
-    return render_template('account.html', title='Account'
-    , acc=accounts, role=role
-    )
+#     accounts = select_cus_accounts(current_user.get_id())
+#     print(accounts)
+#     return render_template('account.html', title='Account'
+#     , acc=accounts, role=role
+#     )

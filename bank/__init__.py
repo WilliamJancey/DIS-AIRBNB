@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'fc089b9218301ad987914c53481bff04'
 
 # set your own database
 #db = "dbname='bank' user='postgres' host='127.0.0.1' password = 'UIS'"
-db = "dbname='airbnb' user='postgres' host='127.0.0.1' password = 'William'"
+db = "dbname='airbnb' user='postgres' host='127.0.0.1' password = 'Filippa' port=5431"
 conn = psycopg2.connect(db)
 
 bcrypt = Bcrypt(app)
@@ -36,10 +36,12 @@ mysession = {"state" : "initializing","role" : "Not assingned", "id": 0 ,"age" :
 print(mysession)
 
 from bank.Login.routes import Login
-from bank.Customer.routes import Customer
-from bank.Employee.routes import Employee
+from bank.routesU import User
+# from bank.Customer.routes import Customer
+# from bank.Employee.routes import Employee
 app.register_blueprint(Login)
-app.register_blueprint(Customer)
-app.register_blueprint(Employee)
+app.register_blueprint(User)
+# app.register_blueprint(Customer)
+# app.register_blueprint(Employee)
 
 #from bank import routes

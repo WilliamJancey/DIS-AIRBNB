@@ -90,7 +90,7 @@ def select_Users(uid):
     cur = conn.cursor()
     sql = """
     SELECT * FROM Users
-    WHERE uid = %s
+    WHERE email = %s
     """
     cur.execute(sql, (uid,))
     user = Users(cur.fetchone()) if cur.rowcount > 0 else None;
