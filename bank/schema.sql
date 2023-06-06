@@ -24,6 +24,7 @@ CREATE TABLE Users(
 CREATE TABLE IF NOT EXISTS Rents(
 	uid integer REFERENCES Users(uid),
 	lid integer REFERENCES Listings(lid),
+	nights integer, 
 	PRIMARY KEY (uid, lid)
 );
 
