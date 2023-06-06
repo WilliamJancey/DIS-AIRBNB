@@ -14,34 +14,40 @@ import sys, datetime
 # roles is defined in the init-file
 from bank import roles, mysession
 
-iEmployee = 1
-iCustomer = 2
+iHost = 1
+iUser = 2
 
 
-Customer = Blueprint('Customer', __name__)
+User = Blueprint('User', __name__)
 
+@User.route("/listings", methods=['GET', 'POST'])
+def listings():
+    cur = conn.cursor() 
+    cur.execute("SELECT * FROM Listings")
+    data = cur.fetchall()
+    return render_template('listings.html', title='Listings', data=data)  #lav listings.html
 
-@Customer.route("/transfer", methods=['GET', 'POST'])
-def transfer():
+@User.route("/listings/rent", methods=['GET', 'POST'])
+def rent():
     if not current_user.is_authenticated:
         flash('Please Login.','danger')
         return redirect(url_for('Login.login'))
 
-    # CUS7 is the customer transfer. Create new endpoint.
-    # EUS10 is the employee transfer.
+    # CUS7 is the User transfer. Create new endpoint.
+    # EUS10 is the Host transfer.
     # manageCustor/ er EUS!=
     # transfer/  må være CUS7
-    # move to customer DONE
+    # move to User DONE
     # duplicate back and change database access here
 
 
-    if not mysession["role"] == roles[iCustomer]:
-        flash('transfer money customer mode.','danger')
+    if not mysession["role"] == roles[iUser]:
+        flash('rent listing User mode.','danger')
         return redirect(url_for('Login.login'))
 
 
-    CPR_number = current_user.get_id()
-    print(CPR_number)
+    uid = current_user.get_id()
+    print(uid)
     dropdown_accounts = select_cus_accounts(current_user.get_id())
     drp_accounts = []
     for drp in dropdown_accounts:
@@ -62,7 +68,7 @@ def transfer():
 
 
 
-@Customer.route("/invest", methods=['GET', 'POST'])
+@User.route("/invest", methods=['GET', 'POST'])
 def invest():
 
     #202212
@@ -72,11 +78,11 @@ def invest():
         return redirect(url_for('Login.login'))
 
     #202212
-    #customer
+    #User
     # CUS4; CUS4-1, CUS4-4
-    # TODO-CUS There us no customer counterpart
-    if not mysession["role"] == roles[iCustomer]:
-        flash('Viewing investents is customer only.','danger')
+    # TODO-CUS There us no User counterpart
+    if not mysession["role"] == roles[iUser]:
+        flash('Viewing investents is User only.','danger')
         return redirect(url_for('Login.login'))
 
 
@@ -84,8 +90,8 @@ def invest():
     print(mysession)
 
     #202212
-    # i think this view works for employee and customer but the
-    # view is different as employees have customers.
+    # i think this view works for Host and User but the
+    # view is different as Hosts have Users.
     # CUS4; CUS4-1, CUS4-4
     print(current_user.get_id())
 
@@ -97,7 +103,7 @@ def invest():
     , inv_sums=investment_sums)
 
 
-@Customer.route("/deposit", methods=['GET', 'POST'])
+@User.route("/deposit", methods=['GET', 'POST'])
 def deposit():
     if not current_user.is_authenticated:
         flash('Please Login.','danger')
@@ -106,9 +112,9 @@ def deposit():
 
     #202212
     #EUS-CUS10
-    # move to employee object
-    if not mysession["role"] == roles[iEmployee]:
-        flash('Deposit is employee only.','danger')
+    # move to Host object
+    if not mysession["role"] == roles[iHost]:
+        flash('Deposit is Host only.','danger')
         return redirect(url_for('Login.login'))
 
     mysession["state"]="deposit"
@@ -124,7 +130,7 @@ def deposit():
         return redirect(url_for('Login.home'))
     return render_template('deposit.html', title='Deposit', form=form)
 
-@Customer.route("/summary", methods=['GET', 'POST'])
+@User.route("/summary", methods=['GET', 'POST'])
 def summary():
     if not current_user.is_authenticated:
         flash('Please Login.','danger')
