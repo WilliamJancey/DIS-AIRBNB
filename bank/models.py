@@ -141,6 +141,19 @@ def update_Visits(uid,name,loc):
     conn.commit()
     cur.close()
 
+def select_user_visits(uid):
+    cur = conn.cursor()
+    sql = """
+    SELECT uid, V.name, V.loc, price
+    FROM Visits V JOIN Attractions A ON V.name = A.name
+    WHERE uid = %s
+    ;
+    """
+    cur.execute(sql, (uid))
+    tuple_resultset = cur.fetchall()
+    cur.close()
+    return tuple_resultset
+
 def select_user_bookings(uid):
     cur = conn.cursor()
     sql = """
@@ -168,51 +181,51 @@ def select_user_transportation(uid):
     return tuple_resultset
 
 
-def select_cus_investments(cpr_number):
-    cur = conn.cursor()
-    sql = """
-    SELECT i.account_number, a.cpr_number, a.created_date
-    FROM investmentaccounts i
-    JOIN accounts a ON i.account_number = a.account_number
---    JOIN manages m ON m.account_number = a.account_number
---    JOIN employees e ON e.id = m.emp_cpr_number
-    WHERE a.cpr_number = %s
-    """
-    cur.execute(sql, (cpr_number,))
-    tuple_resultset = cur.fetchall()
-    cur.close()
-    return tuple_resultset
-
-def select_cus_investments_with_certificates(cpr_number):
-    # TODO-CUS employee id is parameter
-    cur = conn.cursor()
-    sql = """
-    SELECT i.account_number, a.cpr_number, a.created_date
-    , cd.cd_number, start_date, maturity_date, rate, amount
-    FROM investmentaccounts i
-    JOIN accounts a ON i.account_number = a.account_number
-    JOIN certificates_of_deposit cd ON i.account_number = cd.account_number
---    JOIN manages m ON m.account_number = a.account_number
---    JOIN employees e ON e.id = m.emp_cpr_number
-    WHERE a.cpr_number = %s
-    ORDER BY 1
-    """
-    cur.execute(sql, (cpr_number,))
-    tuple_resultset = cur.fetchall()
-    cur.close()
-    return tuple_resultset
-
-def select_cus_investments_certificates_sum(cpr_number):
-    # TODO-CUS employee id is parameter - DONE
-    cur = conn.cursor()
-    sql = """
-    SELECT account_number, cpr_number, created_date, sum
-    FROM vw_cd_sum
-    WHERE cpr_number = %s
-    GROUP BY account_number, cpr_number, created_date, sum
-    ORDER BY account_number
-    """
-    cur.execute(sql, (cpr_number,))
-    tuple_resultset = cur.fetchall()
-    cur.close()
-    return tuple_resultset
+#def select_cus_investments(cpr_number):
+#    cur = conn.cursor()
+#    sql = """
+#    SELECT i.account_number, a.cpr_number, a.created_date
+#    FROM investmentaccounts i
+#    JOIN accounts a ON i.account_number = a.account_number
+#--    JOIN manages m ON m.account_number = a.account_number
+#--    JOIN employees e ON e.id = m.emp_cpr_number
+#    WHERE a.cpr_number = %s
+#    """
+#    cur.execute(sql, (cpr_number,))
+#    tuple_resultset = cur.fetchall()
+#    cur.close()
+#    return tuple_resultset
+#
+#def select_cus_investments_with_certificates(cpr_number):
+#    # TODO-CUS employee id is parameter
+#    cur = conn.cursor()
+#    sql = """
+#    SELECT i.account_number, a.cpr_number, a.created_date
+#    , cd.cd_number, start_date, maturity_date, rate, amount
+#    FROM investmentaccounts i
+#    JOIN accounts a ON i.account_number = a.account_number
+#    JOIN certificates_of_deposit cd ON i.account_number = cd.account_number
+#--    JOIN manages m ON m.account_number = a.account_number
+#--    JOIN employees e ON e.id = m.emp_cpr_number
+#    WHERE a.cpr_number = %s
+#    ORDER BY 1
+#    """
+#    cur.execute(sql, (cpr_number,))
+#    tuple_resultset = cur.fetchall()
+#    cur.close()
+#    return tuple_resultset
+#
+#def select_cus_investments_certificates_sum(cpr_number):
+#    # TODO-CUS employee id is parameter - DONE
+#    cur = conn.cursor()
+#    sql = """
+#    SELECT account_number, cpr_number, created_date, sum
+#    FROM vw_cd_sum
+#    WHERE cpr_number = %s
+#    GROUP BY account_number, cpr_number, created_date, sum
+#    ORDER BY account_number
+#    """
+#    cur.execute(sql, (cpr_number,))
+#    tuple_resultset = cur.fetchall()
+#    cur.close()
+#    return tuple_resultset
