@@ -51,11 +51,11 @@ CREATE TABLE IF NOT EXISTS Attractions(
 	PRIMARY KEY (name, loc)
 );
 
-/* CREATE TABLE IF NOT EXISTS Visits(
-	name varchar(60) NOT NULL REFERENCES Attractions(name),
-	loc varchar(60) NOT NULL REFERENCES Attractions(loc),
-	uid integer REFERENCES Users(uid)
+CREATE TABLE IF NOT EXISTS Visits(
+	name varchar(60),
+	loc varchar(60),
+	uid integer,
+	constraint pk_Visits primary key (name, loc, uid),
+	constraint fk_Users foreign key (uid) REFERENCES Users(uid),
+	constraint fk_Attractions foreign key (name, loc) REFERENCES Attractions(name, loc)
 );
-
-ALTER TABLE Visits ADD CONSTRAINT pk_visits
-	PRIMARY KEY (name, loc, uid); */

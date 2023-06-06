@@ -74,7 +74,7 @@ class Hosts(tuple, UserMixin):
 #         self.transfer_date = user_data[2]
 
 
-def Users(uid,name,email,password):
+def Add_Users(uid,name,email,password):
     uid = int(uid)
     cur = conn.cursor()
     sql = """

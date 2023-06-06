@@ -123,6 +123,17 @@ def Uses(uid,vehicle):
     conn.commit()
     cur.close()
 
+def Visits(uid,name, loc):
+    uid = int(uid)
+    cur = conn.cursor()
+    sql = """
+    INSERT INTO public.Visits(uid,name, loc)
+    VALUES(%s,%s,%s);    
+    """
+    cur.execute(sql, (uid,name, loc))
+    conn.commit()
+    cur.close()
+
 hdf = df[['host_id','host_name']]
 hdf = hdf.drop_duplicates()
 hdf = hdf.reset_index(drop=True)
@@ -160,5 +171,8 @@ Users(5,'Christian','Christian@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pY
 Users(6,'Anders','Anders@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
 
 Rents(1,5022)
+
 Uses(2, 'Metro')
 Uses(3, 'Metro')
+
+Visits(4, 'Empire State Building', 'New York City')
