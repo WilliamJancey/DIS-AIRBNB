@@ -27,7 +27,7 @@ def listings():
     print('mysession["role"]', mysession["role"])
 
     if not mysession["role"] == roles[iUser]:
-        flash('rent listing User mode.','danger')
+        flash('Please Login.','danger')
         return redirect(url_for('Login.login')) 
 
 
