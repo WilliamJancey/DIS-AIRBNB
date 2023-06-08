@@ -25,7 +25,7 @@
         <fieldset class = "form-group">
             <legend class = "border-bottom mb-4">Filter By</legend>
             <section>
-            <div style = "float:left; margin-right:20px;" class = "form-group">
+            <div style = "float:left; margin-right:20px;" class = "form-group" name="area">
                 <label for = "{{ form.area.id }}" class = "form-control-label">{{ form.area.label.text }}</label>
                     {% if form.area.errors %}
                         {{ form.area(class = "form-control form-control-lg is-invalid") }}
@@ -52,29 +52,42 @@
                     {% endif %}
             </div>
             <div style = "float:left; margin-right:20px;" class = "form-group">
-                <label for = "{{ form.roomtype.id }}" class = "form-control-label">{{ form.roomtype.label.text }}</label>
-                    {% if form.roomtype.errors %}
-                        {{ form.roomtype(class = "form-control form-control-lg is-invalid") }}
+                <label for = "{{ form.room_type.id }}" class = "form-control-label">{{ form.room_type.label.text }}</label>
+                    {% if form.room_type.errors %}
+                        {{ form.room_type(class = "form-control form-control-lg is-invalid") }}
                         <div class = "invalid-feedback">
-                            {% for error in form.roomtype.errors %}
+                            {% for error in form.room_type.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.roomtype(class = "form-control form-control-lg") }}
+                        {{ form.room_type(class = "form-control form-control-lg") }}
                     {% endif %}
             </div>
             <div style = "float:left; margin-right:20px;" class = "form-group">
-                <label for = "{{ form.price.id }}" class = "form-control-label">{{ form.price.label.text }}</label>
-                    {% if form.price.errors %}
-                        {{ form.price(class = "form-control form-control-lg is-invalid") }}
+                <label for = "{{ form.minprice.id }}" class = "form-control-label">{{ form.minprice.label.text }}</label>
+                    {% if form.minprice.errors %}
+                        {{ form.minprice(class = "form-control form-control-lg is-invalid") }}
                         <div class = "invalid-feedback">
-                            {% for error in form.price.errors %}
+                            {% for error in form.minprice.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.price(class = "form-control form-control-lg") }}
+                        {{ form.minprice(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            <div style = "float:left; margin-right:20px;" class = "form-group">
+                <label for = "{{ form.maxprice.id }}" class = "form-control-label">{{ form.maxprice.label.text }}</label>
+                    {% if form.maxprice.errors %}
+                        {{ form.maxprice(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.maxprice.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.maxprice(class = "form-control form-control-lg") }}
                     {% endif %}
             </div>
             </section>

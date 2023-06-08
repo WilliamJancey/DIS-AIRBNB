@@ -179,6 +179,54 @@ def select_user_transportation(uid):
     cur.close()
     return tuple_resultset
 
+def select_choices(area, loc, room_type, minprice, maxprice):
+    if area == "None" and loc == "None" and room_type=="None" and minprice==0 and maxprice==10000:
+        return None
+    cur = conn.cursor()
+    #sql = sql.SQL("""
+    #SELECT name, area, loc, roome_type, price FROM Listings 
+    #WHERE area = %s AND loc = %s AND room_type = %s AND price <= %s
+    #LIMIT 50
+    #;
+    #""")
+    print(type(area))
+    print(type(loc))
+    print(type(room_type))
+    print(type(minprice))
+    print(type(maxprice))
+    query_txt = """
+    SELECT name, area, loc, room_type, price FROM Listings 
+    WHERE"""
+    variable = ()
+    if area != "None":
+        query_txt += " area = %s AND"
+        variable += (area,) 
+    if loc != "None":
+        query_txt += " loc = %s AND"
+        variable += (loc,)
+    if room_type != "None":
+        query_txt += " room_type = %s AND"
+        variable += (room_type,)
+    if minprice!= 0:
+        query_txt += " price >= %s AND"
+        variable += (minprice,)
+    if maxprice != 10000:
+        query_txt += " price <= %s AND"
+        variable += (maxprice,)
+
+    query_txt = query_txt[:-3]
+    query_txt += """LIMIT 50;"""
+    print(query_txt)
+    print(type(area))
+    print(type(loc))
+    print(type(room_type))
+    print(type(minprice))
+    print(type(maxprice))
+    cur.execute(query_txt,(variable))
+    tuple_resultset = cur.fetchall()
+    cur.close()
+    return tuple_resultset
+
 
 #def select_cus_investments(cpr_number):
 #    cur = conn.cursor()

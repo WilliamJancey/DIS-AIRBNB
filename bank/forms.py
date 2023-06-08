@@ -32,19 +32,23 @@ areasql = sql.SQL("""SELECT DISTINCT area FROM Listings ORDER BY area""")
 cur.execute(areasql)
 areasql = cur.fetchall()
 areachoices = [(area[0], area[0]) for area in areasql]
+areachoices.insert(0, ('None','None'))
 locsql = sql.SQL("""SELECT DISTINCT loc FROM Listings ORDER BY loc""")
 cur.execute(locsql)
 locsql = cur.fetchall()
 locchoices = [(loc[0], loc[0]) for loc in locsql]
+locchoices.insert(0, ('None','None'))
 roomsql = sql.SQL("""SELECT DISTINCT room_type FROM Listings""")
 cur.execute(roomsql)
 roomsql = cur.fetchall()
 roomchoices = [(room[0], room[0]) for room in roomsql]
+roomchoices.insert(0, ('None','None'))
 
 
 class OverviewForm(FlaskForm):
-    roomtype = SelectField('Roomtype'  , choices=roomchoices, validators=[DataRequired()])
-    price = IntegerField('Price', default=0, render_kw={'min':'0', 'max':'10000'} )
+    room_type = SelectField('Roomtype'  , choices=roomchoices, validators=[DataRequired()])
+    minprice = IntegerField('Price', default=0, render_kw={'min':'0', 'max':'10000'} )
+    maxprice = IntegerField('Maxprice', default=10000, render_kw={'min':'0', 'max':'10000'} )
     nights = IntegerRangeField('Nights', render_kw={'min':'1', 'max':'14'})
     area = SelectField('Area', choices=areachoices, validators=[DataRequired()])
     loc = SelectField('Location', choices=locchoices, validators=[DataRequired()])

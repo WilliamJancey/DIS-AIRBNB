@@ -3,6 +3,7 @@ from bank import app, conn, bcrypt
 from bank import roles, mysession
 from flask_login import current_user
 from bank.forms import OverviewForm
+from bank.models import select_choices
 
 iHost = 1
 iUser = 2
@@ -48,7 +49,19 @@ def listings():
 
     if request.method == 'POST':
         # get form by name "test"
-        print(form)
+        area = request.form.get('area')
+        print(area)
+        loc = request.form.get('loc')
+        print(loc)
+        room_type = request.form.get('room_type')
+        print(room_type)
+        minprice = request.form.get('minprice')
+        print(minprice)
+        maxprice = request.form.get('maxprice')
+        print(maxprice)
+        #print(area)
+        data = select_choices(str(area), str(loc), str(room_type), int(minprice), int(maxprice))
+        return render_template('listings.html', title='Listings', data=data, form=form)
 
 
     return render_template('listings.html', title='Listings', data=data, form=form)  #lav listings.html
