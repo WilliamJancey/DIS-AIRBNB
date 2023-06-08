@@ -20,39 +20,104 @@
 </head>
 
 <body>
+    <form method="post" action = "">
+        {{ form.hidden_tag() }}
+        <fieldset class = "form-group">
+            <legend class = "border-bottom mb-4">Filter By</legend>
+            <section>
+            <div style = "float:left; margin-right:20px;" class = "form-group">
+                <label for = "{{ form.area.id }}" class = "form-control-label">{{ form.area.label.text }}</label>
+                    {% if form.area.errors %}
+                        {{ form.area(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.area.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.area(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            <div style = "float:left; margin-right:20px;"  class = "form-group">
+                <label for = "{{ form.loc.id }}" class = "form-control-label">{{ form.loc.label.text }}</label>
+                    {% if form.loc.errors %}
+                        {{ form.loc(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.loc.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.loc(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            <div style = "float:left; margin-right:20px;" class = "form-group">
+                <label for = "{{ form.roomtype.id }}" class = "form-control-label">{{ form.roomtype.label.text }}</label>
+                    {% if form.roomtype.errors %}
+                        {{ form.roomtype(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.roomtype.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.roomtype(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            <div style = "float:left; margin-right:20px;" class = "form-group">
+                <label for = "{{ form.price.id }}" class = "form-control-label">{{ form.price.label.text }}</label>
+                    {% if form.price.errors %}
+                        {{ form.price(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.price.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.price(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            </section>
+
+        </div>
+        </fieldset>
+        <div class = "form-group">
+            {{ form.submit(class = "btn btn-primary mb-2") }}
+        </div>
+    </form>    
+      
+    <!-- <form method="post">
+        <select name="test">
+            <option value="1">Area</option>
+            <option value="2">Location</option>
+            <option value="3">Room Type</option>
+            <option value="4">Price</option>
+        </select>
+
+         <button type="submit" name="submit" value="Submit"
+        >Sort</button>
+    </form> -->
     <table>
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Area</th>
                 <th>Location</th>
-                <th>Room type</th>
+                <th>Room Type</th>
                 <th>Price</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Cozy Apartment</td>
-                <td>New York City</td>
-                <td>$100 per night</td>
-                <td>4.5 stars</td>
-                <td>4.5 stars</td>
+                {% for d in data %}
+                <tr>
+                    <td>{{d[0]}}</td>
+                    <td>{{d[1]}}</td>
+                    <td>{{d[2]}}</td>
+                    <td>{{d[3]}}</td>
+                    <td>{{d[4]}}</td>        
+                {% endfor %}
             </tr>
-            <tr>
-                <td>Beach House</td>
-                <td>Los Angeles</td>
-                <td>$150 per night</td>
-                <td>4.8 stars</td>
-                <td>4.5 stars</td>
-            </tr>
-            <tr>
-                <td>Mountain Cabin</td>
-                <td>Aspen</td>
-                <td>$200 per night</td>
-                <td>4.9 stars</td>
-                <td>4.5 stars</td>
-            </tr>
-            <!-- Add more rows for additional listings -->
         </tbody>
     </table>
 </body>

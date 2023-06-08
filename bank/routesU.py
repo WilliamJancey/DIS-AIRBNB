@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from bank import app, conn, bcrypt
 from bank import roles, mysession
 from flask_login import current_user
+from bank.forms import OverviewForm
 
 iHost = 1
 iUser = 2
@@ -31,8 +32,23 @@ def listings():
         return redirect(url_for('Login.login')) 
 
 
+
+    form = OverviewForm()
+
+    # if form.validate_on_submit():
+
     uid = current_user.get_id()
     cur = conn.cursor() 
-    cur.execute("SELECT * FROM Listings")
+    cur.execute("SELECT name, area, loc, room_type, price FROM Listings LIMIT 50")
     data = cur.fetchall()
-    return render_template('listings.html', title='Listings', data=data)  #lav listings.html
+    #print(data)
+
+    if request.method == 'GET':
+        return render_template('listings.html', title='Listings', data=data, form = form)
+
+    if request.method == 'POST':
+        # get form by name "test"
+        print(form)
+
+
+    return render_template('listings.html', title='Listings', data=data, form=form)  #lav listings.html

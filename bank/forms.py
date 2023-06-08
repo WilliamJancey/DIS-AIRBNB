@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField
 from wtforms import DecimalRangeField, IntegerRangeField, SelectMultipleField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, InputRequired
+from psycopg2 import sql
+from bank import conn
 class AddUserForm(FlaskForm):
     username = StringField('name',
                            validators=[DataRequired(), Length(min=2, max=20)])
@@ -25,12 +27,27 @@ class HostLoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+cur = conn.cursor()
+areasql = sql.SQL("""SELECT DISTINCT area FROM Listings ORDER BY area""")
+cur.execute(areasql)
+areasql = cur.fetchall()
+areachoices = [(area[0], area[0]) for area in areasql]
+locsql = sql.SQL("""SELECT DISTINCT loc FROM Listings ORDER BY loc""")
+cur.execute(locsql)
+locsql = cur.fetchall()
+locchoices = [(loc[0], loc[0]) for loc in locsql]
+roomsql = sql.SQL("""SELECT DISTINCT room_type FROM Listings""")
+cur.execute(roomsql)
+roomsql = cur.fetchall()
+roomchoices = [(room[0], room[0]) for room in roomsql]
+
+
 class OverviewForm(FlaskForm):
-    roomtype = SelectField('Roomtype'  , choices=[], validators=[DataRequired()])
-    price = DecimalRangeField('Price')
+    roomtype = SelectField('Roomtype'  , choices=roomchoices, validators=[DataRequired()])
+    price = IntegerField('Price', default=0, render_kw={'min':'0', 'max':'10000'} )
     nights = IntegerRangeField('Nights', render_kw={'min':'1', 'max':'14'})
-    area = SelectMultipleField('Area', choices=[], validators=[DataRequired()])
-    loc = SelectMultipleField('Location', choices=[], validators=[DataRequired()])
+    area = SelectField('Area', choices=areachoices, validators=[DataRequired()])
+    loc = SelectField('Location', choices=locchoices, validators=[DataRequired()])
     submit = SubmitField('Confirm')
 
 class RentForm(FlaskForm):
