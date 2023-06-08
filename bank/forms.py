@@ -70,6 +70,6 @@ vehchoices = [(veh[0], veh[0]) for veh in vehsql]
 vehchoices.insert(0, ('None','None'))
 
 class TransportationForm(FlaskForm):
-    vehicle = SelectField('Vehicle'  , choices=vehchoices, validators=[DataRequired()])
-    trips = IntegerField('Trips pr. day', validators=[DataRequired()])
+    vehicle = SelectField('Vehicle'  , choices=vehchoices, validators=[InputRequired()])
+    trips = IntegerField('Trips pr. day', validators=[InputRequired()])
     submit = SubmitField('Confirm')
