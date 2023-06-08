@@ -231,7 +231,8 @@ def total_trip_price(trips, vehicle):
     cur = conn.cursor()
 
     query_txt = """
-    SELECT price FROM Transportation 
+    SELECT vehicle, price, (SELECT price FROM Transportation WHERE vehicle = %s)*%s
+    FROM Transportation 
     WHERE vehicle = %s"""
     variable = "None"
     if vehicle == "Bicycle":
@@ -245,13 +246,13 @@ def total_trip_price(trips, vehicle):
     elif vehicle == "Uber":
         variable = "Uber"
     
-    cur.execute(query_txt,(variable,))
+    cur.execute(query_txt,(variable,int(trips),variable))
     tuple_resultset = cur.fetchall()
     cur.close()
     print(tuple_resultset)
     print(trips)
     print(type(trips))
-    return tuple_resultset[0][0] * int(trips)
+    return tuple_resultset
 
 
 

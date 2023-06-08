@@ -82,9 +82,7 @@ def transportation():
         trips = request.form.get('trips')
         vehicle = request.form.get('vehicle')
 
-        total_price = total_trip_price(trips, vehicle)
-
-        data = [(row[0],row[1],total_price) for row in data[:-1]]
+        data = total_trip_price(trips, vehicle)
 
         print(data)
         return render_template('transportation.html', title='Transportation', data=data, form = form)
