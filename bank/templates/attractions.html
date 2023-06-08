@@ -35,6 +35,7 @@
             <li><a href="/listings">Listings</a></li>
             <li><a href="/transportation">Transportation</a></li>
             <li><a href="/attractions">Attractions</a></li>
+            <li><a href="/bookings">My Bookings</a></li>
           </ul>
         </div>
         
@@ -62,7 +63,7 @@
     <form method="post" action = "">
         {{ form.hidden_tag() }}
         <fieldset class = "form-group">
-            <legend class = "border-bottom mb-4">Filter By</legend>
+            <legend class = "border-bottom mb-4">Choose attraction and nr. of people</legend>
             <section>
             <div style = "float:left; margin-right:20px;" class = "form-group">
                 <label for = "{{ form.attraction.id }}" class = "form-control-label">{{ form.attraction.label.text }}</label>
@@ -75,6 +76,19 @@
                         </div>
                     {% else %}
                         {{ form.attraction(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            <div style = "float:left; margin-right:20px;" class = "form-group">
+                <label for = "{{ form.people.id }}" class = "form-control-label">{{ form.people.label.text }}</label>
+                    {% if form.people.errors %}
+                        {{ form.people(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.people.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.people(class = "form-control form-control-lg") }}
                     {% endif %}
             </div>
             </section>
@@ -103,6 +117,7 @@
                 <th>Attraction</th>
                 <th>Location</th>
                 <th>Price</th>
+                <th>Total price</th>
             </tr>
         </thead>
         <tbody>
@@ -111,7 +126,8 @@
                 <tr>
                     <td>{{d[0]}}</td>
                     <td>{{d[1]}}</td>
-                    <td>{{d[2]}}</td> 
+                    <td>{{d[2]}}</td>
+                    <td>{{d[3]}}</td>
                 {% endfor %}
             </tr>
         </tbody>

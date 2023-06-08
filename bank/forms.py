@@ -57,6 +57,7 @@ class OverviewForm(FlaskForm):
 class RentForm(FlaskForm):
     nights = IntegerField('Nights', validators=[InputRequired()])
     submit = SubmitField('Confirm')
+    
 attractionsql = sql.SQL("""SELECT DISTINCT name FROM Attractions ORDER BY name""")
 cur.execute(attractionsql)
 attractionsql = cur.fetchall()
@@ -65,7 +66,7 @@ attractionchoices.insert(0, ('None','None'))
 
 class VisitForm(FlaskForm):
     attraction = SelectField('Attraction'  , choices=attractionchoices, validators=[DataRequired()])
-    loc = SelectField('Location'  , choices=[], validators=[DataRequired()])
+    people = IntegerField('Number of people', validators=[InputRequired()])
     submit = SubmitField('Confirm')
 
 vehsql = sql.SQL("""SELECT DISTINCT vehicle FROM Transportation ORDER BY vehicle""")

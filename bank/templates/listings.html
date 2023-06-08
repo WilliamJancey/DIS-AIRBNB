@@ -35,6 +35,7 @@
             <li><a href="/listings">Listings</a></li>
             <li><a href="/transportation">Transportation</a></li>
             <li><a href="/attractions">Attractions</a></li>
+            <li><a href="/bookings">My Bookings</a></li>
           </ul>
         </div>
         
@@ -163,7 +164,7 @@
             <tr>
                 {% for d in data %}
                 <tr>
-                    <td>{{d[0]}}</td>
+                    <td><a href="/listings/rent/{{d[0]}}">{{d[0]}}</a></td>
                     <td>{{d[1]}}</td>
                     <td>{{d[2]}}</td>
                     <td>{{d[3]}}</td>

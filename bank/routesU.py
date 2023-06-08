@@ -2,8 +2,8 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from bank import app, conn, bcrypt
 from bank import roles, mysession
 from flask_login import current_user
-from bank.forms import OverviewForm, TransportationForm, VisitForm
-from bank.models import select_choices, total_trip_price, select_attractions
+from bank.forms import OverviewForm, TransportationForm, VisitForm, RentForm
+from bank.models import select_choices, total_trip_price, select_attractions,find_price
 
 iHost = 1
 iUser = 2
@@ -95,13 +95,53 @@ def attractions():
     cur = conn.cursor()
     cur.execute("SELECT name, loc, price FROM Attractions ORDER BY name")
     data = cur.fetchall()
+    data.append((" "," "))
 
     if request.method == 'GET':
         return render_template('attractions.html', title='Attractions', data=data, form = form)
     
     if request.method == 'POST':
         attraction = request.form.get('attraction')
-        data = select_attractions(attraction)
+        people = request.form.get('people')
+        data = select_attractions(attraction,people)
         return render_template('attractions.html', title='Attractions', data=data, form = form)
     
     return render_template('attractions.html', title='Attractions', data=data, form = form)
+
+@User.route("/listings/rent/<listing_name>", methods=['GET', 'POST'])
+def rent(listing_name):
+    print(listing_name)
+    form = RentForm()
+    cur = conn.cursor()
+    cur.execute("SELECT name, area, loc, room_type, price FROM Listings WHERE name = %s", (listing_name,))
+    data = cur.fetchall()
+    data.append((" "," "))
+
+    if request.method == 'GET':
+        return render_template('rent.html', title='Rent', data=data, form = form)
+    
+    if request.method == 'POST':
+        print(data)
+        nights = request.form.get('nights')
+        data = find_price(listing_name, nights)
+        print(data)
+        return render_template('rent.html', title='Rent', data=data, form = form)
+    
+    return render_template('rent.html', title='Rent', data=data, form = form)
+
+""" @User.route("/bookings", methods=['GET', 'POST'])
+def attractions():
+    form = VisitForm()
+    cur = conn.cursor()
+    cur.execute("SELECT name, loc, price FROM Attractions ORDER BY name")
+    data = cur.fetchall()
+
+    if request.method == 'GET':
+        return render_template('bookings.html', title='Bookings', data=data, form = form)
+    
+    if request.method == 'POST':
+        attraction = request.form.get('attraction')
+        data = select_attractions(attraction)
+        return render_template('bookings.html', title='Bookings', data=data, form = form)
+    
+    return render_template('bookings.html', title='Bookings', data=data, form = form) """

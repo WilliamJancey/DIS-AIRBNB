@@ -254,13 +254,42 @@ def total_trip_price(trips, vehicle):
     print(type(trips))
     return tuple_resultset
 
-def select_attractions(name):
+def select_attractions(name,people):
     cur = conn.cursor()
     sql = """
-    SELECT name, loc, price FROM Attractions WHERE name = %s
+    SELECT name, loc, price, (SELECT price FROM Attractions WHERE name = %s)*%s
+    FROM Attractions
+    WHERE name = %s
     ;
     """
-    cur.execute(sql, (name,))
+    variable = "None"
+    if name == "Empire State Building":
+        variable = "Empire State Building"
+    elif name == "Statue of Liberty":
+        variable = "Statue of Liberty"
+    elif name == "Museum of Moderne Art":
+        variable = "Museum of Moderne Art"
+    elif name == "Guggenheim Museum":
+        variable = "Guggenheim Museum"
+    elif name == "Broadway Ticket":
+        variable = "Broadway Ticket"
+    elif name == "Natural History Museum":
+        variable = "Natural History Museum"
+
+    cur.execute(sql, (variable,int(people),variable))
+    tuple_resultset = cur.fetchall()
+    cur.close()
+    return tuple_resultset
+
+def find_price(name, nights):
+    cur = conn.cursor()
+    sql = """
+    SELECT name, area, loc, room_type, price, (SELECT price FROM Listings WHERE name = %s)*%s
+    FROM Listings
+    WHERE name = %s
+    ;
+    """
+    cur.execute(sql, (name,int(nights),name))
     tuple_resultset = cur.fetchall()
     cur.close()
     return tuple_resultset

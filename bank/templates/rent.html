@@ -1,5 +1,4 @@
 <head>
-    <title>Airbnb Transportation</title>
     <style>
         .menu {
           background-color: rgb(0, 157, 255);
@@ -56,39 +55,27 @@
             background-color: rgb(0, 157, 255);
         }
     </style>
-    
+
+    <title>Airbnb Listings</title>
 </head>
 
 <body>
     <form method="post" action = "">
         {{ form.hidden_tag() }}
         <fieldset class = "form-group">
-            <legend class = "border-bottom mb-4">Choose vehicle and trips pr. day</legend>
+            <legend class = "border-bottom mb-4">Preferred nights</legend>
             <section>
-            <div style = "float:left; margin-right:20px;" class = "form-group" name="vehicle">
-                <label for = "{{ form.vehicle.id }}" class = "form-control-label">{{ form.vehicle.label.text }}</label>
-                    {% if form.vehicle.errors %}
-                        {{ form.vehicle(class = "form-control form-control-lg is-invalid") }}
+            <div style = "float:left; margin-right:20px;" class = "form-group" name="nights">
+                <label for = "{{ form.nights.id }}" class = "form-control-label">{{ form.nights.label.text }}</label>
+                    {% if form.nights.errors %}
+                        {{ form.nights(class = "form-control form-control-lg is-invalid") }}
                         <div class = "invalid-feedback">
-                            {% for error in form.vehicle.errors %}
+                            {% for error in form.nights.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.vehicle(class = "form-control form-control-lg") }}
-                    {% endif %}
-            </div>
-            <div style = "float:left; margin-right:20px;" class = "form-group">
-                <label for = "{{ form.trips.id }}" class = "form-control-label">{{ form.trips.label.text }}</label>
-                    {% if form.trips.errors %}
-                        {{ form.trips(class = "form-control form-control-lg is-invalid") }}
-                        <div class = "invalid-feedback">
-                            {% for error in form.trips.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.trips(class = "form-control form-control-lg") }}
+                        {{ form.nights(class = "form-control form-control-lg") }}
                     {% endif %}
             </div>
             </section>
@@ -102,32 +89,52 @@
       
     <!-- <form method="post">
         <select name="test">
-            <option value="1">vehicle</option>
+            <option value="1">nights</option>
             <option value="2">Location</option>
             <option value="3">Room Type</option>
-            <option value="4">trips</option>
+            <option value="4">Price</option>
         </select>
 
          <button type="submit" name="submit" value="Submit"
         >Sort</button>
     </form> -->
-    <table>
-        <thead>
-            <tr>
-                <th>Vehicle</th>
-                <th>Price pr. trip</th>
-                <th>Total price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                {% for d in data %}
-                <tr>
-                    <td>{{d[0]}}</td>
-                    <td>{{d[1]}}</td>
-                    <td>{{d[2]}}</td> 
-                {% endfor %}
-            </tr>
-        </tbody>
-    </table>
+    <style>
+        h1 {
+            background-color: rgb(0, 157, 255);
+            padding: 10px;
+            font-size: 24px;
+        }
+        .static-text {
+            font-weight: bold;
+        }
+        .book-button {
+            background-color: rgb(0, 157, 255);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    
+        .book-button:hover {
+            background-color: #0073e6;
+        }
+    </style>
+    
+    <h1>
+        <span class="static-text">Title:</span> {{ data[0][0] }}
+    </h1>
+    
+    <p><span class="static-text">Area:</span> {{ data[0][1] }}</p>
+    <p><span class="static-text">Location:</span> {{ data[0][2] }}</p>
+    <p><span class="static-text">Room Type:</span> {{ data[0][3] }}</p>
+    <p><span class="static-text">Price:</span> {{ data[0][4] }}</p>
+    <p><span class="static-text">Total Price:</span> {{ data[0][5] }}</p>
+    
+    <button class="book-button">Book</button>
+    
+    
+    
+
 </body>
