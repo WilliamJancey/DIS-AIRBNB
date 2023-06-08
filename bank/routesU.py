@@ -2,8 +2,8 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from bank import app, conn, bcrypt
 from bank import roles, mysession
 from flask_login import current_user
-from bank.forms import OverviewForm
-from bank.models import select_choices
+from bank.forms import OverviewForm, TransportationForm
+from bank.models import select_choices, total_trip_price
 
 iHost = 1
 iUser = 2
@@ -65,3 +65,28 @@ def listings():
 
 
     return render_template('listings.html', title='Listings', data=data, form=form)  #lav listings.html
+
+@User.route("/transportation", methods=['GET', 'POST'])
+def transportation():
+    form = TransportationForm()
+
+    cur = conn.cursor() 
+    cur.execute("SELECT vehicle, price FROM Transportation")
+    data = cur.fetchall()
+    data.append((" "," "))
+
+    if request.method == 'GET':
+        return render_template('transportation.html', title='Transportation', data=data, form = form)
+    
+    if request.method == 'POST':
+        trips = request.form.get('trips')
+        vehicle = request.form.get('vehicle')
+
+        total_price = total_trip_price(trips, vehicle)
+
+        data = [(row[0],row[1],total_price) for row in data[:-1]]
+
+        print(data)
+        return render_template('transportation.html', title='Transportation', data=data, form = form)
+    
+    return render_template('transportation.html', title='Transportation', data=data, form = form)

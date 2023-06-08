@@ -63,7 +63,13 @@ class VisitForm(FlaskForm):
     loc = SelectField('Location'  , choices=[], validators=[DataRequired()])
     submit = SubmitField('Confirm')
 
+vehsql = sql.SQL("""SELECT DISTINCT vehicle FROM Transportation ORDER BY vehicle""")
+cur.execute(vehsql)
+vehsql = cur.fetchall()
+vehchoices = [(veh[0], veh[0]) for veh in vehsql]
+vehchoices.insert(0, ('None','None'))
+
 class TransportationForm(FlaskForm):
-    vehicle = SelectField('Vehicle'  , choices=[], validators=[DataRequired()])
+    vehicle = SelectField('Vehicle'  , choices=vehchoices, validators=[DataRequired()])
     trips = IntegerField('Trips pr. day', validators=[DataRequired()])
     submit = SubmitField('Confirm')

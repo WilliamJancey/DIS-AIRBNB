@@ -227,6 +227,33 @@ def select_choices(area, loc, room_type, minprice, maxprice):
     cur.close()
     return tuple_resultset
 
+def total_trip_price(trips, vehicle):
+    cur = conn.cursor()
+
+    query_txt = """
+    SELECT price FROM Transportation 
+    WHERE vehicle = %s"""
+    variable = "None"
+    if vehicle == "Bicycle":
+        variable = "Bicycle"
+    elif vehicle == "Bus":
+        variable = "Bus"
+    elif vehicle == "Metro":
+        variable = "Metro"
+    elif vehicle == "Taxi":
+        variable = "Taxi"
+    elif vehicle == "Uber":
+        variable = "Uber"
+    
+    cur.execute(query_txt,(variable,))
+    tuple_resultset = cur.fetchall()
+    cur.close()
+    print(tuple_resultset)
+    print(trips)
+    print(type(trips))
+    return tuple_resultset[0][0] * int(trips)
+
+
 
 #def select_cus_investments(cpr_number):
 #    cur = conn.cursor()

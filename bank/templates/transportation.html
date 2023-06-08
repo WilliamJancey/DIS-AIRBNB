@@ -1,0 +1,132 @@
+<head>
+    <title>Airbnb Transportation</title>
+    <style>
+        .menu {
+          background-color: rgb(0, 157, 255);
+          padding: 10px;
+        }
+        
+        .menu ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .menu li {
+          display: inline;
+          margin-right: 10px;
+        }
+        
+        .menu a {
+          text-decoration: none;
+          color: #333;
+          padding: 5px;
+          border-radius: 4px;
+        }
+        
+        .menu a:hover {
+          background-color: #333;
+          color: #fff;
+        }
+        </style>
+        
+        <div class="menu">
+          <ul>
+            <li><a href="/listings">Listings</a></li>
+            <li><a href="/transportation">Transportation</a></li>
+            <li><a href="#attractions">Attractions</a></li>
+          </ul>
+        </div>
+        
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: rgb(0, 157, 255);
+        }
+    </style>
+    
+</head>
+
+<body>
+    <form method="post" action = "">
+        {{ form.hidden_tag() }}
+        <fieldset class = "form-group">
+            <legend class = "border-bottom mb-4">Filter By</legend>
+            <section>
+            <div style = "float:left; margin-right:20px;" class = "form-group" name="vehicle">
+                <label for = "{{ form.vehicle.id }}" class = "form-control-label">{{ form.vehicle.label.text }}</label>
+                    {% if form.vehicle.errors %}
+                        {{ form.vehicle(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.vehicle.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.vehicle(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            <div style = "float:left; margin-right:20px;" class = "form-group">
+                <label for = "{{ form.trips.id }}" class = "form-control-label">{{ form.trips.label.text }}</label>
+                    {% if form.trips.errors %}
+                        {{ form.trips(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in form.trips.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.trips(class = "form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+            </section>
+
+        </div>
+        </fieldset>
+        <div class = "form-group">
+            {{ form.submit(class = "btn btn-primary mb-2") }}
+        </div>
+    </form>    
+      
+    <!-- <form method="post">
+        <select name="test">
+            <option value="1">vehicle</option>
+            <option value="2">Location</option>
+            <option value="3">Room Type</option>
+            <option value="4">trips</option>
+        </select>
+
+         <button type="submit" name="submit" value="Submit"
+        >Sort</button>
+    </form> -->
+    <table>
+        <thead>
+            <tr>
+                <th>Vehicle</th>
+                <th>Price pr. trip</th>
+                <th>Total price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for d in data %}
+                <tr>
+                    <td>{{d[0]}}</td>
+                    <td>{{d[1]}}</td>
+                    <td>{{d[2]}}</td> 
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+</body>
