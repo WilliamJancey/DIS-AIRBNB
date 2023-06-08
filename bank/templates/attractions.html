@@ -64,30 +64,17 @@
         <fieldset class = "form-group">
             <legend class = "border-bottom mb-4">Filter By</legend>
             <section>
-            <div style = "float:left; margin-right:20px;" class = "form-group" name="vehicle">
-                <label for = "{{ form.vehicle.id }}" class = "form-control-label">{{ form.vehicle.label.text }}</label>
-                    {% if form.vehicle.errors %}
-                        {{ form.vehicle(class = "form-control form-control-lg is-invalid") }}
-                        <div class = "invalid-feedback">
-                            {% for error in form.vehicle.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.vehicle(class = "form-control form-control-lg") }}
-                    {% endif %}
-            </div>
             <div style = "float:left; margin-right:20px;" class = "form-group">
-                <label for = "{{ form.trips.id }}" class = "form-control-label">{{ form.trips.label.text }}</label>
-                    {% if form.trips.errors %}
-                        {{ form.trips(class = "form-control form-control-lg is-invalid") }}
+                <label for = "{{ form.attraction.id }}" class = "form-control-label">{{ form.attraction.label.text }}</label>
+                    {% if form.attraction.errors %}
+                        {{ form.attraction(class = "form-control form-control-lg is-invalid") }}
                         <div class = "invalid-feedback">
-                            {% for error in form.trips.errors %}
+                            {% for error in form.attraction.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.trips(class = "form-control form-control-lg") }}
+                        {{ form.attraction(class = "form-control form-control-lg") }}
                     {% endif %}
             </div>
             </section>
@@ -113,9 +100,9 @@
     <table>
         <thead>
             <tr>
-                <th>Vehicle</th>
-                <th>Price pr. trip</th>
-                <th>Total price</th>
+                <th>Attraction</th>
+                <th>Location</th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>

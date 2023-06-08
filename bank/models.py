@@ -254,6 +254,16 @@ def total_trip_price(trips, vehicle):
     print(type(trips))
     return tuple_resultset
 
+def select_attractions(name):
+    cur = conn.cursor()
+    sql = """
+    SELECT name, loc, price FROM Attractions WHERE name = %s
+    ;
+    """
+    cur.execute(sql, (name,))
+    tuple_resultset = cur.fetchall()
+    cur.close()
+    return tuple_resultset
 
 
 #def select_cus_investments(cpr_number):
