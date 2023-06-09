@@ -1,15 +1,9 @@
 import pandas as pd
-#from bank import conn
 from psycopg2 import sql
-
 from flask import Flask
 import psycopg2
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-
-#202212
-#from flask import session
-#from flask_session import Session
 
 
 app = Flask(__name__)
@@ -17,7 +11,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fc089b9218301ad987914c53481bff04'
 
 # set your own database
-#db = "dbname='bank' user='postgres' host='127.0.0.1' password = 'UIS'"
 db = "dbname='airbnb' user='postgres' host='127.0.0.1' password = 'Filppa'  port=5431"
 conn = psycopg2.connect(db)
 
@@ -163,7 +156,7 @@ Attractions('Guggenheim Museum', 'New York City', 25)
 Attractions('Broadway Ticket', 'New York City', 100)
 Attractions('Natural History Museum', 'New York City', 28)
 
-Users(1,'Filippa','filippa@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
+Users(1,'Filippa','Filippa@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
 Users(2,'William','William@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
 Users(3,'Dmitriy','Dmitriy@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')
 Users(4,'Axel','Axel@gmail.com','$2b$12$KFkp1IEMGT4QrWwjPGhE3ejOv6Z3pYhx/S4qOoFbanR2sMiZqgeJO')

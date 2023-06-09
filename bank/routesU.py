@@ -15,40 +15,23 @@ User = Blueprint('User', __name__)
 def listings():
     print(current_user.is_authenticated)
     if not current_user.is_authenticated:
-        #flash('Please Login.','danger')
         return redirect(url_for('Login.login'))
-
-    # CUS7 is the User transfer. Create new endpoint.
-    # EUS10 is the Host transfer.
-    # manageCustor/ er EUS!=
-    # transfer/  må være CUS7
-    # move to User DONE
-    # duplicate back and change database access here
-
     print("iuser:",roles[iUser])
     print('mysession["role"]', mysession["role"])
 
     if not mysession["role"] == roles[iUser]:
-        #flash('Please Login.','danger')
         return redirect(url_for('Login.login')) 
-
-
 
     form = OverviewForm()
 
-    # if form.validate_on_submit():
-
-    uid = current_user.get_id()
     cur = conn.cursor() 
     cur.execute("SELECT name, area, loc, room_type, price FROM Listings LIMIT 50")
     data = cur.fetchall()
-    #print(data)
 
     if request.method == 'GET':
         return render_template('listings.html', title='Listings', data=data, form = form)
 
     if request.method == 'POST':
-        # get form by name "test"
         area = request.form.get('area')
         print(area)
         loc = request.form.get('loc')
@@ -59,15 +42,20 @@ def listings():
         print(minprice)
         maxprice = request.form.get('maxprice')
         print(maxprice)
-        #print(area)
         data = select_choices(str(area), str(loc), str(room_type), int(minprice), int(maxprice))
         return render_template('listings.html', title='Listings', data=data, form=form)
 
 
-    return render_template('listings.html', title='Listings', data=data, form=form)  #lav listings.html
+    return render_template('listings.html', title='Listings', data=data, form=form) 
 
 @User.route("/transportation", methods=['GET', 'POST'])
 def transportation():
+    if not current_user.is_authenticated:
+        return redirect(url_for('Login.login'))
+
+    if not mysession["role"] == roles[iUser]:
+        return redirect(url_for('Login.login')) 
+
     form = TransportationForm()
 
     cur = conn.cursor() 
@@ -112,6 +100,11 @@ def transportation():
 
 @User.route("/attractions", methods=['GET', 'POST'])
 def attractions():
+    if not current_user.is_authenticated:
+        return redirect(url_for('Login.login'))
+
+    if not mysession["role"] == roles[iUser]:
+        return redirect(url_for('Login.login')) 
     form = VisitForm()
     cur = conn.cursor()
     cur.execute("SELECT name, loc, price FROM Attractions ORDER BY name")
@@ -153,6 +146,11 @@ def attractions():
 
 @User.route("/listings/rent/<listing_name>", methods=['GET', 'POST'])
 def rent(listing_name):
+    if not current_user.is_authenticated:
+        return redirect(url_for('Login.login'))
+
+    if not mysession["role"] == roles[iUser]:
+        return redirect(url_for('Login.login')) 
     print(listing_name)
     flash('', 'success')
     form = RentForm()
@@ -212,6 +210,11 @@ def rent(listing_name):
 
 @User.route("/bookings", methods=['GET', 'POST'])
 def bookings():
+    if not current_user.is_authenticated:
+        return redirect(url_for('Login.login'))
+
+    if not mysession["role"] == roles[iUser]:
+        return redirect(url_for('Login.login')) 
     cur = conn.cursor()
     cur.execute("""SELECT name, loc, price FROM Attractions NATURAL JOIN Visits V     
                     WHERE V.uid = (SELECT U.uid FROM Users U WHERE U.email = %s)
