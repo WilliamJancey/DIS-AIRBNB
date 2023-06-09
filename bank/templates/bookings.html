@@ -65,6 +65,7 @@
 
 <body>
     <section>
+        <div style = "float:left;"> 
     <table>
         <thead>
             <tr>
@@ -72,8 +73,7 @@
                 <th>Location</th>
                 <th>Area</th>
                 <th>Room Type</th>
-                <th>Nights</th>
-                <th>Total Price</th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
@@ -84,18 +84,19 @@
                     <td>{{d[1]}}</td>
                     <td>{{d[2]}}</td>
                     <td>{{d[3]}}</td>
+                    <td>{{d[4]}}</td>
                 {% endfor %}
             </tr>
         </tbody>
     </table>
+    </div>
+    <div style = "float:left;"> 
     <table>
         <thead>
             <tr>
                 <th>Attraction</th>
                 <th>Location</th>
-                <th>price</th>
-                <th>Number of people</th>
-                <th>Total price</th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
@@ -109,13 +110,13 @@
             </tr>
         </tbody>
     </table>
+    </div>
+    <div style = "float:left; "> 
     <table>
         <thead>
             <tr>
                 <th>Transportation</th>
-                <th>Vehicle</th>
-                <th>Trips pr. day</th>
-                <th>Total price</th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
@@ -128,5 +129,6 @@
             </tr>
         </tbody>
     </table>
+    </div>
     </section>
 </body>
