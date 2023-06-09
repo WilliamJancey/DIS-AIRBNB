@@ -165,19 +165,23 @@ def rent(listing_name):
     
     return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length)
 
-""" @User.route("/bookings", methods=['GET', 'POST'])
-def attractions():
-    form = VisitForm()
+@User.route("/bookings", methods=['GET', 'POST'])
+def bookings():
     cur = conn.cursor()
-    cur.execute("SELECT name, loc, price FROM Attractions ORDER BY name")
-    data = cur.fetchall()
+    cur.execute("""SELECT name, loc, price FROM Attractions NATURAL JOIN Visits V     
+                    WHERE V.uid = (SELECT U.uid FROM Users U WHERE U.email = %s)
+                    ORDER BY name""", (mysession['id'],))
+    attraction = cur.fetchall()
+
+    cur.execute("""SELECT name, area, loc, room_type, price FROM Listings NATURAL JOIN Rents R
+                    WHERE R.uid = (SELECT U.uid FROM Users U WHERE U.email = %s)""", (mysession['id'],))
+    listing = cur.fetchall()
+
+    cur.execute("""SELECT vehicle, price FROM Transportation NATURAL JOIN Uses U
+                    WHERE U.uid = (SELECT U.uid FROM Users U WHERE U.email = %s)""", (mysession['id'],))
+    transportation = cur.fetchall()
 
     if request.method == 'GET':
-        return render_template('bookings.html', title='Bookings', data=data, form = form)
+        return render_template('bookings.html', title='Bookings', attraction=attraction, listing=listing, transportation=transportation)
     
-    if request.method == 'POST':
-        #attraction = request.form.get('attraction')
-        data = select_attractions(attraction)
-        return render_template('bookings.html', title='Bookings', data=data, form = form)
-    
-    return render_template('bookings.html', title='Bookings', data=data, form = form) """
+    return render_template('bookings.html', title='Bookings', attraction=attraction, listing=listing, transportation=transportation)

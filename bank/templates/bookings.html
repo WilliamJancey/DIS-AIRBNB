@@ -60,7 +60,7 @@
 </head>
 
 <h1>
-    <span class="static-text"></span> {{ data[0][0] }}
+    <span class="static-text"></span> My Bookings
 </h1>
 
 <body>
@@ -78,7 +78,7 @@
         </thead>
         <tbody>
             <tr>
-                {% for d in data %}
+                {% for d in listing %}
                 <tr>
                     <td>{{d[0]}}</td>
                     <td>{{d[1]}}</td>
@@ -93,18 +93,18 @@
             <tr>
                 <th>Attraction</th>
                 <th>Location</th>
+                <th>price</th>
                 <th>Number of people</th>
                 <th>Total price</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                {% for d in data %}
+                {% for d in attraction %}
                 <tr>
                     <td>{{d[0]}}</td>
                     <td>{{d[1]}}</td>
                     <td>{{d[2]}}</td>
-                    <td>{{d[3]}}</td>
                 {% endfor %}
             </tr>
         </tbody>
@@ -120,12 +120,10 @@
         </thead>
         <tbody>
             <tr>
-                {% for d in data %}
+                {% for d in transportation %}
                 <tr>
                     <td>{{d[0]}}</td>
                     <td>{{d[1]}}</td>
-                    <td>{{d[2]}}</td>
-                    <td>{{d[3]}}</td>
                 {% endfor %}
             </tr>
         </tbody>

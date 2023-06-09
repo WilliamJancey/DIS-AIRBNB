@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Listings(
 	hid integer REFERENCES Hosts(hid) ON DELETE CASCADE
 );
 
-CREATE TABLE Users(
+CREATE TABLE IF NOT EXISTS Users(
 	uid integer PRIMARY KEY,
 	name varchar(60),
 	email varchar(60),
