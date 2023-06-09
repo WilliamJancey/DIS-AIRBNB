@@ -1,0 +1,134 @@
+<head>
+    <title>Airbnb Transportation</title>
+    <style>
+        .menu {
+          background-color: rgb(0, 157, 255);
+          padding: 10px;
+        }
+        
+        .menu ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .menu li {
+          display: inline;
+          margin-right: 10px;
+        }
+        
+        .menu a {
+          text-decoration: none;
+          color: #333;
+          padding: 5px;
+          border-radius: 4px;
+        }
+        
+        .menu a:hover {
+          background-color: #333;
+          color: #fff;
+        }
+        </style>
+        
+        <div class="menu">
+          <ul>
+            <li><a href="/listings">Listings</a></li>
+            <li><a href="/transportation">Transportation</a></li>
+            <li><a href="/attractions">Attractions</a></li>
+            <li><a href="/bookings">My Bookings</a></li>
+          </ul>
+        </div>
+        
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: rgb(0, 157, 255);
+        }
+    </style>
+    
+</head>
+
+<h1>
+    <span class="static-text"></span> {{ data[0][0] }}
+</h1>
+
+<body>
+    <section>
+    <table>
+        <thead>
+            <tr>
+                <th>Listing Name</th>
+                <th>Location</th>
+                <th>Area</th>
+                <th>Room Type</th>
+                <th>Nights</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for d in data %}
+                <tr>
+                    <td>{{d[0]}}</td>
+                    <td>{{d[1]}}</td>
+                    <td>{{d[2]}}</td>
+                    <td>{{d[3]}}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Attraction</th>
+                <th>Location</th>
+                <th>Number of people</th>
+                <th>Total price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for d in data %}
+                <tr>
+                    <td>{{d[0]}}</td>
+                    <td>{{d[1]}}</td>
+                    <td>{{d[2]}}</td>
+                    <td>{{d[3]}}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Transportation</th>
+                <th>Vehicle</th>
+                <th>Trips pr. day</th>
+                <th>Total price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for d in data %}
+                <tr>
+                    <td>{{d[0]}}</td>
+                    <td>{{d[1]}}</td>
+                    <td>{{d[2]}}</td>
+                    <td>{{d[3]}}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    </section>
+</body>
