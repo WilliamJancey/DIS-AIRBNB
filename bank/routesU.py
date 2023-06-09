@@ -3,7 +3,7 @@ from bank import app, conn, bcrypt
 from bank import roles, mysession
 from flask_login import current_user
 from bank.forms import OverviewForm, TransportationForm, VisitForm, RentForm
-from bank.models import select_choices, total_trip_price, select_attractions,find_price, update_Rents
+from bank.models import select_choices, total_trip_price, select_attractions,find_price, update_Rents, update_Uses, update_Visits
 
 iHost = 1
 iUser = 2
@@ -79,15 +79,36 @@ def transportation():
         return render_template('transportation.html', title='Transportation', data=data, form = form)
     
     if request.method == 'POST':
-        trips = request.form.get('trips')
-        vehicle = request.form.get('vehicle')
-
-        data = total_trip_price(trips, vehicle)
+        try:
+            trips = request.args.get('trips')
+            vehicle = request.args.get('vehicle')
+            data = total_trip_price(trips, vehicle)
+            cur.execute(""" SELECT uid FROM Users WHERE email = %s """, (mysession["id"],))
+            booking = cur.fetchall()
+        except:
+            print("Error! Please try again.1")
+        
+        try: 
+            print(booking[0][0], vehicle)
+            update_Uses(vehicle,booking[0][0])
+            print("Success! in transportation")
+        except:
+            cur.execute("ROLLBACK")
+            conn.commit()
+            print("Error! Please try again.2")
+        try: 
+            trips = request.form.get('trips')
+            vehicle = request.form.get('vehicle')
+            data = total_trip_price(trips, vehicle)
+        except:
+            print("Error! Please try again.1")
+        
+        
 
         print(data)
-        return render_template('transportation.html', title='Transportation', data=data, form = form)
+        return render_template('transportation.html', title='Transportation', data=data, form = form, t = trips, v = vehicle)
     
-    return render_template('transportation.html', title='Transportation', data=data, form = form)
+    return render_template('transportation.html', title='Transportation', data=data, form = form, t = trips, v = vehicle)
 
 @User.route("/attractions", methods=['GET', 'POST'])
 def attractions():
@@ -101,12 +122,34 @@ def attractions():
         return render_template('attractions.html', title='Attractions', data=data, form = form)
     
     if request.method == 'POST':
-        attraction = request.form.get('attraction')
-        people = request.form.get('people')
-        data = select_attractions(attraction,people)
-        return render_template('attractions.html', title='Attractions', data=data, form = form)
+        try:
+            attraction = request.args.get('attraction')
+            print(attraction)
+            cur.execute(""" SELECT loc FROM Attractions WHERE name = %s """, (attraction,))
+            loc = cur.fetchall()
+            print(loc)
+            loc = loc[0][0]
+            people = request.args.get('people')
+            data = select_attractions(attraction,people)
+            cur.execute(""" SELECT uid FROM Users WHERE email = %s """, (mysession["id"],))
+            booking = cur.fetchall()
+        except:
+            print("Error! Please try again.1")
+        try: 
+            update_Visits(booking[0][0],attraction,loc)
+        except:
+            cur.execute("ROLLBACK")
+            conn.commit()
+            print("Error! Please try again.2")
+        try:
+            attraction = request.form.get('attraction')
+            people = request.form.get('people')
+            data = select_attractions(attraction,people)
+        except: 
+            print("Error! Please try again.3")
+        return render_template('attractions.html', title='Attractions', data=data, form = form, p = people, a = attraction)
     
-    return render_template('attractions.html', title='Attractions', data=data, form = form)
+    return render_template('attractions.html', title='Attractions', data=data, form = form, p = people, a = attraction)
 
 @User.route("/listings/rent/<listing_name>", methods=['GET', 'POST'])
 def rent(listing_name):

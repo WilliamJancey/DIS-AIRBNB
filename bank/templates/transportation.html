@@ -28,6 +28,10 @@
           background-color: #333;
           color: #fff;
         }
+
+        a {
+            text-decoration: none;
+        }
         </style>
         
         <div class="menu">
@@ -120,10 +124,15 @@
             </tr>
         </thead>
         <tbody>
+            
+
+            <form id="book-form" method="post" action="/transportation?trips={{ t }}&vehicle={{ v }}">
+                <input type="hidden" name="csrf_token">
+            </form>
             <tr>
                 {% for d in data %}
                 <tr>
-                    <td>{{d[0]}}</td>
+                    <td><a href="#" onclick="event.preventDefault(); document.getElementById('book-form').submit();" class="book-button">{{d[0]}}</a></td>
                     <td>{{d[1]}}</td>
                     <td>{{d[2]}}</td> 
                 {% endfor %}
