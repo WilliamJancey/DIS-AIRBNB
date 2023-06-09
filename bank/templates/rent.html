@@ -133,7 +133,20 @@
     <p><span class="static-text">Price:</span> {{ data[0][4] }}</p>
     <p><span class="static-text">Total Price:</span> {{ data[0][5] }}</p>
     
-    <a href="/bookings" class="book-button">Book</a>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('book-form').submit();" class="book-button">Book</a>
+
+    {% if data_length>5 %}
+        <form id="book-form" method="post" action="/listings/rent/{{data[0][0]}}?nights={{ data[0][5]/data[0][4] }}">
+            <!-- Add any additional form fields here -->
+            <input type="hidden" name="csrf_token">
+        </form>
+    {% else %}
+        <form id="book-form" method="post" action="/listings/rent/{{data[0][0]}}">
+            <!-- Add any additional form fields here -->
+            <input type="hidden" name="csrf_token">
+        </form>
+    {% endif %}
+
     
 
     {% with messages = get_flashed_messages() %}
