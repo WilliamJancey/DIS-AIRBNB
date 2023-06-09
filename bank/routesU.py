@@ -117,38 +117,53 @@ def rent(listing_name):
     cur.execute("SELECT name, area, loc, room_type, price FROM Listings WHERE name = %s", (listing_name,))
     data = cur.fetchall()
     data.append((" "," "))
-    print(data)
-    print(data[0])
-    print(len(data[0]))
+    data_length = len(data[0])
 
     if request.method == 'GET':
-        return render_template('rent.html', title='Rent', data=data, form = form)
+        print("GET: ",data)
+        print("GET: ",data[0])
+        print("GET: ",len(data[0]))
+        return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length)
     
-    if request.method == 'POST' and len(data[0]) == 5:
-        print(data)
-        nights = request.form.get('nights')
-        data = find_price(listing_name, nights)
-        print(data)
-        return render_template('rent.html', title='Rent', data=data, form = form)
-    
-    elif request.method == 'POST' and len(data[0]) == 6:
-        cur.execute(
+    if request.method == 'POST':
+        print("POST: ",data)
+
+        try:
+            nights = request.args.get('nights')
+            data = find_price(listing_name, nights)
+            print("POST: ",data)
+            print(mysession["id"],listing_name)
+            cur.execute(
             """ SELECT uid FROM Users WHERE email = %s
                 UNION
                 SELECT lid FROM Listings WHERE name = %s""",
             (mysession["id"],listing_name))
-        booking = cur.fetchall()
-        print("\nThis is id's: ",booking)
+            print("Fejl!!!!!!!!!!!!!!")
+            booking = cur.fetchall()
+            print("\nThis is id's: ",booking)
+            
+        except:
+            print("Error! Please try again.2")
+
         try:
             update_Rents(booking[0][0], booking[1][0])
         except:
-            flash('Error! Please try again.', 'danger')
-            return render_template('rent.html', title='Rent', data=data, form = form)
-        
-        flash('Booking successful!', 'success')
-        return render_template('rent.html', title='Rent', data=data, form = form)
+            cur.execute("ROLLBACK")
+            conn.commit()
+            print("Error! Please try again.3")
+
+        try:
+            nights = request.form.get('nights')
+            data = find_price(listing_name, nights)
+        except:
+            print("Error! Please try again.5")
+
+        print("POST: ",data)
+        print("my session: ",mysession)
+
+        return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length)
     
-    return render_template('rent.html', title='Rent', data=data, form = form)
+    return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length)
 
 """ @User.route("/bookings", methods=['GET', 'POST'])
 def attractions():
@@ -161,7 +176,7 @@ def attractions():
         return render_template('bookings.html', title='Bookings', data=data, form = form)
     
     if request.method == 'POST':
-        attraction = request.form.get('attraction')
+        #attraction = request.form.get('attraction')
         data = select_attractions(attraction)
         return render_template('bookings.html', title='Bookings', data=data, form = form)
     
