@@ -115,6 +115,7 @@
             border-radius: 4px;
             font-size: 18px;
             cursor: pointer;
+            text-decoration: none;
         }
     
         .book-button:hover {
@@ -123,7 +124,7 @@
     </style>
     
     <h1>
-        <span class="static-text">Title:</span> {{ data[0][0] }}
+        <span class="static-text"></span> {{ data[0][0] }}
     </h1>
     
     <p><span class="static-text">Area:</span> {{ data[0][1] }}</p>
@@ -132,9 +133,18 @@
     <p><span class="static-text">Price:</span> {{ data[0][4] }}</p>
     <p><span class="static-text">Total Price:</span> {{ data[0][5] }}</p>
     
-    <button class="book-button">Book</button>
+    <a href="/bookings" class="book-button">Book</a>
     
-    
-    
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <td class="{{ message.category }}">{{ message }}</td>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
 
 </body>

@@ -3,7 +3,7 @@ from bank import app, conn, bcrypt
 from bank import roles, mysession
 from flask_login import current_user
 from bank.forms import OverviewForm, TransportationForm, VisitForm, RentForm
-from bank.models import select_choices, total_trip_price, select_attractions,find_price
+from bank.models import select_choices, total_trip_price, select_attractions,find_price, update_Rents
 
 iHost = 1
 iUser = 2
@@ -15,7 +15,7 @@ User = Blueprint('User', __name__)
 def listings():
     print(current_user.is_authenticated)
     if not current_user.is_authenticated:
-        flash('Please Login.','danger')
+        #flash('Please Login.','danger')
         return redirect(url_for('Login.login'))
 
     # CUS7 is the User transfer. Create new endpoint.
@@ -29,7 +29,7 @@ def listings():
     print('mysession["role"]', mysession["role"])
 
     if not mysession["role"] == roles[iUser]:
-        flash('Please Login.','danger')
+        #flash('Please Login.','danger')
         return redirect(url_for('Login.login')) 
 
 
@@ -111,20 +111,41 @@ def attractions():
 @User.route("/listings/rent/<listing_name>", methods=['GET', 'POST'])
 def rent(listing_name):
     print(listing_name)
+    flash('', 'success')
     form = RentForm()
     cur = conn.cursor()
     cur.execute("SELECT name, area, loc, room_type, price FROM Listings WHERE name = %s", (listing_name,))
     data = cur.fetchall()
     data.append((" "," "))
+    print(data)
+    print(data[0])
+    print(len(data[0]))
 
     if request.method == 'GET':
         return render_template('rent.html', title='Rent', data=data, form = form)
     
-    if request.method == 'POST':
+    if request.method == 'POST' and len(data[0]) == 5:
         print(data)
         nights = request.form.get('nights')
         data = find_price(listing_name, nights)
         print(data)
+        return render_template('rent.html', title='Rent', data=data, form = form)
+    
+    elif request.method == 'POST' and len(data[0]) == 6:
+        cur.execute(
+            """ SELECT uid FROM Users WHERE email = %s
+                UNION
+                SELECT lid FROM Listings WHERE name = %s""",
+            (mysession["id"],listing_name))
+        booking = cur.fetchall()
+        print("\nThis is id's: ",booking)
+        try:
+            update_Rents(booking[0][0], booking[1][0])
+        except:
+            flash('Error! Please try again.', 'danger')
+            return render_template('rent.html', title='Rent', data=data, form = form)
+        
+        flash('Booking successful!', 'success')
         return render_template('rent.html', title='Rent', data=data, form = form)
     
     return render_template('rent.html', title='Rent', data=data, form = form)

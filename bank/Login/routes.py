@@ -81,7 +81,7 @@ def login():
             print(roles)
 
             login_user(user, remember=form.remember.data)
-            flash('Login successful.','success')
+            #flash('Login successful.','success')
             next_page = request.args.get('next')
             print("This is Login.home:", url_for('Login.home'))
             return redirect('/listings')
