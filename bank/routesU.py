@@ -145,8 +145,10 @@ def rent(listing_name):
         except:
             print("Error! Please try again.2")
 
+        print("data_length: ",data_length)
         try:
             update_Rents(booking[0][0], booking[1][0])
+            print("Success! in rent")
         except:
             cur.execute("ROLLBACK")
             conn.commit()
@@ -161,9 +163,9 @@ def rent(listing_name):
         print("POST: ",data)
         print("my session: ",mysession)
 
-        return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length)
+        return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length, n=nights)
     
-    return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length)
+    return render_template('rent.html', title='Rent', data=data, form = form, data_length=data_length, n=nights)
 
 """ @User.route("/bookings", methods=['GET', 'POST'])
 def attractions():

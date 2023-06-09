@@ -135,17 +135,9 @@
     
     <a href="#" onclick="event.preventDefault(); document.getElementById('book-form').submit();" class="book-button">Book</a>
 
-    {% if data_length>5 %}
-        <form id="book-form" method="post" action="/listings/rent/{{data[0][0]}}?nights={{ data[0][5]/data[0][4] }}">
-            <!-- Add any additional form fields here -->
-            <input type="hidden" name="csrf_token">
-        </form>
-    {% else %}
-        <form id="book-form" method="post" action="/listings/rent/{{data[0][0]}}">
-            <!-- Add any additional form fields here -->
-            <input type="hidden" name="csrf_token">
-        </form>
-    {% endif %}
+    <form id="book-form" method="post" action="/listings/rent/{{data[0][0]}}?nights={{ n }}">
+        <input type="hidden" name="csrf_token">
+    </form>
 
     
 
